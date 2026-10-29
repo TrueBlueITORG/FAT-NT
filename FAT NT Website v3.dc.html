@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>FAT NT — Website Concept v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#F4F1EA;}
+*{box-sizing:border-box;}
+body{font-family:'Archivo',system-ui,sans-serif;color:#0E1620;-webkit-font-smoothing:antialiased;}
+a{color:#0E1620;text-decoration:underline;text-underline-offset:3px;}
+a:hover{color:#B4561A;}
+button{font-family:inherit;}
+input,select,textarea{font-family:inherit;font-size:16px;}
+h1,h2,h3{text-wrap:balance;}
+p{text-wrap:pretty;}
+::selection{background:#F28C38;color:#0E1620;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div style="--accent: {{ accent }}; min-height:100vh; display:flex; flex-direction:column; background:#F4F1EA;">
+
+<sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#0E1620; color:#C8CDD4; font-size:12px; letter-spacing:0.02em; padding:7px clamp(20px,4vw,48px); display:flex; flex-wrap:wrap; gap:4px 18px; justify-content:space-between;">
+    <span><strong style="color:var(--accent,#F28C38); font-weight:700;">Concept v0.3</strong> — temporary branding, sample courses &amp; stock photography for FAT NT review</span>
+    <span>True Blue IT Services Pty Ltd</span>
+  </div>
+</sc-if>
+
+<header style="position:sticky; top:0; z-index:40; background:rgba(244,241,234,0.94); backdrop-filter:blur(10px); border-bottom:1px solid #D9D3C7;">
+  <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px); height:72px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+    <button onClick="{{ goHome }}" aria-label="FAT NT home" style="display:flex; align-items:center; gap:6px; background:none; border:none; padding:0; cursor:pointer;">
+      <span style="font-weight:900; font-stretch:75%; font-size:32px; letter-spacing:-0.01em; color:#0E1620; line-height:1;">FAT</span>
+      <span style="font-weight:900; font-stretch:75%; font-size:17px; color:#0E1620; background:var(--accent,#F28C38); padding:4px 6px 3px; line-height:1;">NT</span>
+    </button>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <nav aria-label="Main" style="display:flex; align-items:center; gap:28px;">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+          <button onClick="{{ n.onClick }}" style="background:none; border:none; cursor:pointer; padding:8px 0; font-size:15px; font-weight:{{ n.weight }}; color:#0E1620; border-bottom:2px solid {{ n.bar }};" style-hover="border-bottom-color:#0E1620;">{{ n.label }}</button>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <div style="display:flex; align-items:center; gap:18px;">
+      <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+        <span style="font-size:14px; font-weight:600; color:#3E4753;">(08) 8900 0000</span>
+      </sc-if>
+      <button onClick="{{ goBook }}" style="background:#0E1620; color:#FFFFFF; border:none; border-radius:2px; padding:0 18px; height:44px; font-size:15px; font-weight:700; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:10px;" style-hover="background:#24303F;">Book a course <span style="color:var(--accent,#F28C38);">→</span></button>
+      <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleMenu }}" aria-label="Open menu" aria-expanded="{{ menuOpen }}" style="width:44px; height:44px; border:1.5px solid #0E1620; border-radius:2px; background:transparent; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; cursor:pointer;">
+          <span style="display:block; width:18px; height:2px; background:#0E1620;"></span>
+          <span style="display:block; width:18px; height:2px; background:#0E1620;"></span>
+        </button>
+      </sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ showMobileMenu }}" hint-placeholder-val="{{ false }}">
+    <nav aria-label="Mobile" style="border-top:1px solid #D9D3C7; padding:8px clamp(20px,4vw,48px) 24px; display:flex; flex-direction:column; animation:fadeUp .2s ease;">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+        <button onClick="{{ n.onClick }}" style="text-align:left; background:none; border:none; border-bottom:1px solid #D9D3C7; padding:16px 0; font-size:30px; font-stretch:75%; font-weight:800; text-transform:uppercase; color:#0E1620; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+          <span>{{ n.label }}</span><span style="width:10px; height:10px; background:{{ n.bar }};"></span>
+        </button>
+      </sc-for>
+    </nav>
+  </sc-if>
+</header>
+
+<main style="flex:1;">
+
+<!-- ================= HOME ================= -->
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <section data-screen-label="Home — Hero" style="position:relative; min-height:clamp(600px,88vh,880px); display:flex; background:#0E1620; color:#FFFFFF; overflow:hidden;">
+    <img src="https://images.unsplash.com/photo-1755718669693-5e5e9ce53e17?auto=format&fit=crop&w=2000&q=70" alt="Trainer demonstrating CPR on a training manikin (stock placeholder)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+    <span style="position:absolute; inset:0; background:linear-gradient(0deg,rgba(14,22,32,0.92) 0%,rgba(14,22,32,0.45) 48%,rgba(14,22,32,0.25) 100%);"></span>
+    <div style="position:relative; width:100%; max-width:1320px; margin:0 auto; padding:clamp(24px,3vw,40px) clamp(20px,4vw,48px) clamp(28px,4vw,48px); display:flex; flex-direction:column; justify-content:space-between; gap:48px;">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; font-size:14px; font-weight:500; color:#E4E7EB;">
+        <span>First aid · Workplace safety · Emergency response · Wellbeing</span>
+        <span><span style="color:var(--accent,#F28C38);">★★★★★</span>  4.9 from 180+ learner reviews</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:36px;">
+        <h1 style="margin:0; font-size:clamp(60px,11vw,168px); line-height:0.86; font-stretch:72%; font-weight:800; text-transform:uppercase; letter-spacing:-0.01em;">Practical training.<br><span style="color:var(--accent,#F28C38);">Real-world skills.</span></h1>
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:28px;">
+          <p style="margin:0; flex:1 1 320px; max-width:520px; font-size:clamp(17px,1.5vw,20px); line-height:1.5; color:#E4E7EB;">Hands-on courses for people and workplaces across the Northern Territory — in Darwin, onsite at your workplace, or out bush.</p>
+          <form onSubmit="{{ finderSubmit }}" style="flex:0 1 460px; background:#F4F1EA; color:#0E1620; padding:20px; display:flex; flex-direction:column; gap:12px;">
+            <label for="finder" style="font-size:13px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;">Find a course</label>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <select id="finder" value="{{ finderCat }}" onChange="{{ setFinderCat }}" style="flex:1 1 200px; height:52px; padding:0 12px; border:1.5px solid #0E1620; border-radius:2px; background:#FFFFFF; color:#0E1620;">
+                <sc-for list="{{ catNames }}" as="o" hint-placeholder-count="5"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+              <button type="submit" style="flex:0 0 auto; height:52px; padding:0 22px; background:var(--accent,#F28C38); color:#0E1620; border:none; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;" style-hover="filter:brightness(1.06);">Show courses →</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Course categories" style="background:var(--accent,#F28C38); color:#0E1620;">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));">
+      <sc-for list="{{ catStrip }}" as="k" hint-placeholder-count="4">
+        <button onClick="{{ k.onClick }}" style="background:none; border:none; border-left:1px solid rgba(14,22,32,0.25); padding:22px 20px; display:flex; justify-content:space-between; align-items:baseline; gap:12px; cursor:pointer; text-align:left; color:#0E1620;" style-hover="background:rgba(14,22,32,0.08);">
+          <span style="font-size:clamp(22px,2vw,28px); font-stretch:75%; font-weight:800; text-transform:uppercase; line-height:1;">{{ k.label }}</span>
+          <span style="font-size:13px; font-weight:600;">{{ k.count }} →</span>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Courses" style="padding:clamp(64px,9vw,128px) 0 clamp(56px,7vw,96px);">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px);">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px; margin-bottom:40px;">
+        <h2 style="margin:0; font-size:clamp(48px,7vw,104px); line-height:0.88; font-stretch:72%; font-weight:800; text-transform:uppercase;">Popular<br>courses</h2>
+        <div style="flex:0 1 420px; display:flex; flex-direction:column; gap:16px; align-items:flex-start;">
+          <p style="margin:0; font-size:17px; line-height:1.55; color:#3E4753;">Short, practical courses that cover the most common workplace requirements. Pick one, check the details, book in minutes.</p>
+          <button onClick="{{ goCourses }}" style="background:none; border:none; padding:0 0 4px; border-bottom:2px solid #0E1620; font-size:16px; font-weight:700; color:#0E1620; cursor:pointer;">All courses →</button>
+        </div>
+      </div>
+      <div style="border-top:2px solid #0E1620;">
+        <sc-for list="{{ featuredRows }}" as="c" hint-placeholder-count="5">
+          <article style="display:flex; flex-wrap:wrap; align-items:center; gap:16px 28px; padding:20px 0; border-bottom:1px solid #D9D3C7;" style-hover="background:#ECE7DD;">
+            <span style="flex:0 0 32px; font-size:14px; font-weight:600; color:#6A727D;">{{ c.num }}</span>
+            <div style="flex:0 0 132px; height:92px; position:relative; overflow:hidden; background:#DCD6CA;"><img src="{{ c.src }}" alt="{{ c.alt }}" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div>
+            <div style="flex:1 1 280px; min-width:0;">
+              <h3 style="margin:0; font-size:clamp(22px,2vw,28px); line-height:1.1; font-weight:700; letter-spacing:-0.01em;">{{ c.title }}</h3>
+              <p style="margin:6px 0 0; font-size:15px; line-height:1.5; color:#4A535E;">{{ c.desc }}</p>
+            </div>
+            <dl style="flex:0 1 300px; margin:0; display:grid; grid-template-columns:repeat(3,auto); gap:2px 24px; font-size:14px;">
+              <dt style="color:#6A727D;">Category</dt><dt style="color:#6A727D;">Duration</dt><dt style="color:#6A727D;">Delivery</dt>
+              <dd style="margin:0; font-weight:700;">{{ c.cat }}</dd><dd style="margin:0; font-weight:700;">{{ c.dur }}</dd><dd style="margin:0; font-weight:700;">{{ c.mode }}</dd>
+            </dl>
+            <div style="flex:0 0 auto; display:flex; gap:8px; margin-left:auto;">
+              <button onClick="{{ c.onDetails }}" style="height:48px; padding:0 18px; background:transparent; border:1.5px solid #0E1620; border-radius:2px; color:#0E1620; font-size:15px; font-weight:700; cursor:pointer;" style-hover="background:#0E1620; color:#FFFFFF;">Details</button>
+              <button onClick="{{ c.onBook }}" style="height:48px; padding:0 18px; background:var(--accent,#F28C38); border:none; border-radius:2px; color:#0E1620; font-size:15px; font-weight:700; cursor:pointer;" style-hover="filter:brightness(1.06);">Book →</button>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Hands-on" style="padding:0 0 clamp(64px,9vw,128px);">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px); display:flex; flex-wrap:wrap; gap:clamp(32px,5vw,80px); align-items:flex-start;">
+      <div style="flex:1 1 380px; position:relative; aspect-ratio:4/5; overflow:hidden; background:#DCD6CA;">
+        <img src="https://images.unsplash.com/photo-1622115297822-a3798fdbe1f6?auto=format&fit=crop&w=1100&q=70" alt="Learner practising first aid" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        <span style="position:absolute; left:0; bottom:0; background:#F4F1EA; padding:14px 18px 0 0; font-size:14px; font-weight:600;">Small classes. Real equipment.</span>
+      </div>
+      <div style="flex:1.25 1 460px; display:flex; flex-direction:column; gap:36px; padding-top:clamp(0px,4vw,48px);">
+        <h2 style="margin:0; font-size:clamp(34px,4.2vw,60px); line-height:1.02; font-weight:700; letter-spacing:-0.025em;">Most of the day, you're <span style="background:var(--accent,#F28C38); padding:0 6px;">doing</span> — not sitting and listening.</h2>
+        <p style="margin:0; max-width:560px; font-size:18px; line-height:1.6; color:#3E4753;">Every FAT NT session is built around realistic scenarios. You practise with guidance from a trainer who's done the job, so the skills are still there when you need them.</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:28px 32px;">
+          <sc-for list="{{ handsOn }}" as="i" hint-placeholder-count="4">
+            <div style="border-top:1.5px solid #0E1620; padding-top:14px; display:flex; gap:14px;">
+              <span style="font-size:14px; font-weight:700; color:#B4561A;">{{ i.n }}</span>
+              <span style="font-size:16px; line-height:1.45; font-weight:500;">{{ i.t }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="position:relative; aspect-ratio:16/8; overflow:hidden; background:#DCD6CA;"><img src="https://images.unsplash.com/photo-1755549746563-a7c0a391af36?auto=format&fit=crop&w=1200&q=70" alt="CPR practice on a manikin" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Territory" style="background:#0F2340; color:#FFFFFF; padding:clamp(64px,9vw,120px) 0 0; overflow:hidden;">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px);">
+      <div style="display:flex; flex-wrap:wrap; gap:clamp(32px,5vw,80px); align-items:flex-end;">
+        <div style="flex:1.2 1 420px;">
+          <h2 style="margin:0; font-size:clamp(48px,7vw,104px); line-height:0.88; font-stretch:72%; font-weight:800; text-transform:uppercase;">Built around<br><span style="color:var(--accent,#F28C38);">Territory</span> life</h2>
+        </div>
+        <div style="flex:1 1 340px; display:flex; flex-direction:column; gap:22px; align-items:flex-start;">
+          <p style="margin:0; font-size:18px; line-height:1.6; color:#C9D3E2;">Early starts, weekend sessions and onsite delivery for remote teams. We work around your roster so your people can train without the downtime.</p>
+          <button onClick="{{ goBook }}" style="height:52px; padding:0 22px; background:var(--accent,#F28C38); color:#0E1620; border:none; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Find a session →</button>
+        </div>
+      </div>
+      <div style="margin-top:clamp(48px,6vw,80px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); border-top:1px solid rgba(255,255,255,0.2);">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+          <div style="padding:28px 24px 40px 0; border-right:1px solid rgba(255,255,255,0.12);">
+            <p style="margin:0; font-size:clamp(48px,5.5vw,80px); line-height:0.9; font-stretch:72%; font-weight:800;">{{ s.n }}</p>
+            <p style="margin:10px 0 0; font-size:15px; color:#C9D3E2;">{{ s.label }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="position:relative; height:clamp(240px,32vw,440px);"><img src="https://images.unsplash.com/photo-1755548376576-e045f6e01773?auto=format&fit=crop&w=2000&q=70" alt="Learners practising CPR in a group session" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div>
+  </section>
+
+  <section data-screen-label="Home — Bundles" style="padding:clamp(64px,9vw,128px) 0;">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px);">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px; margin-bottom:48px;">
+        <h2 style="margin:0; font-size:clamp(48px,7vw,104px); line-height:0.88; font-stretch:72%; font-weight:800; text-transform:uppercase;">Bundle &amp;<br>save</h2>
+        <p style="margin:0; flex:0 1 420px; font-size:17px; line-height:1.55; color:#3E4753;">Combine related courses into one booking and cover several workplace requirements in fewer days.</p>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:0 28px;">
+        <sc-for list="{{ bundles }}" as="b" hint-placeholder-count="3">
+          <div style="border-top:2px solid #0E1620; border-right:1px solid #D9D3C7; padding:28px 28px 32px 0; display:flex; flex-direction:column; gap:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px;">
+              <span style="font-size:13px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#B4561A;">{{ b.tag }}</span>
+              <span style="font-size:14px; font-weight:700; background:#0E1620; color:#FFFFFF; padding:4px 8px;">{{ b.save }}</span>
+            </div>
+            <h3 style="margin:0; font-size:clamp(30px,3vw,40px); line-height:0.95; font-stretch:75%; font-weight:800; text-transform:uppercase;">{{ b.title }}</h3>
+            <ul style="list-style:none; margin:0; padding:0; flex:1;">
+              <sc-for list="{{ b.items }}" as="i" hint-placeholder-count="4">
+                <li style="font-size:16px; line-height:1.4; padding:10px 0; border-bottom:1px solid #D9D3C7; display:flex; gap:12px;"><span style="color:#B4561A; font-weight:700;">+</span><span>{{ i }}</span></li>
+              </sc-for>
+            </ul>
+            <button onClick="{{ goBook }}" style="align-self:flex-start; height:48px; padding:0 20px; background:transparent; border:1.5px solid #0E1620; border-radius:2px; color:#0E1620; font-size:15px; font-weight:700; cursor:pointer;" style-hover="background:#0E1620; color:#FFFFFF;">Book this bundle →</button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Industries" style="padding:0 0 clamp(64px,9vw,128px);">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px);">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px; margin-bottom:40px;">
+        <h2 style="margin:0; font-size:clamp(48px,7vw,104px); line-height:0.88; font-stretch:72%; font-weight:800; text-transform:uppercase;">Every<br>workplace</h2>
+        <button onClick="{{ goContact }}" style="background:none; border:none; padding:0 0 4px; border-bottom:2px solid #0E1620; font-size:16px; font-weight:700; color:#0E1620; cursor:pointer;">Talk to us about your industry →</button>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr)); grid-auto-rows:minmax(240px,auto); gap:12px;">
+        <sc-for list="{{ industries }}" as="d" hint-placeholder-count="6">
+          <button onClick="{{ goCourses }}" style="grid-column:{{ d.span }}; grid-row:{{ d.span }}; position:relative; min-height:240px; border:none; padding:0; overflow:hidden; cursor:pointer; text-align:left; background:#0E1620;">
+            <img src="{{ d.src }}" alt="{{ d.title }}" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s ease;">
+            <span style="position:absolute; inset:0; background:linear-gradient(0deg,rgba(14,22,32,0.88) 0%,rgba(14,22,32,0) 60%);"></span>
+            <span style="position:absolute; top:16px; left:18px; font-size:13px; font-weight:700; color:#FFFFFF;">{{ d.num }}</span>
+            <span style="position:absolute; left:18px; right:18px; bottom:18px; display:flex; flex-direction:column; gap:6px;">
+              <span style="font-size:{{ d.size }}; line-height:0.92; font-stretch:75%; font-weight:800; text-transform:uppercase; color:#FFFFFF;">{{ d.title }}</span>
+              <span style="font-size:14px; line-height:1.4; color:#E4E7EB;">{{ d.body }}</span>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Testimonials" style="background:#ECE7DD; padding:clamp(64px,9vw,128px) 0;">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px);">
+      <div style="display:flex; flex-wrap:wrap; gap:clamp(32px,5vw,80px);">
+        <div style="flex:0 1 280px; display:flex; flex-direction:column; gap:8px;">
+          <p style="margin:0; font-size:clamp(96px,11vw,160px); line-height:0.82; font-stretch:72%; font-weight:800;">4.9</p>
+          <span style="color:#B4561A; font-size:20px; letter-spacing:3px;">★★★★★</span>
+          <p style="margin:0; font-size:15px; color:#4A535E;">Average from 180+ learner reviews</p>
+        </div>
+        <figure style="flex:1 1 480px; margin:0; display:flex; flex-direction:column; gap:28px;">
+          <blockquote style="margin:0; font-size:clamp(26px,3.2vw,44px); line-height:1.18; font-weight:500; letter-spacing:-0.02em; min-height:3.6em; animation:fadeUp .3s ease;">“{{ tCur.quote }}”</blockquote>
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px; border-top:1.5px solid #0E1620; padding-top:18px;">
+            <figcaption style="display:flex; flex-direction:column;"><strong style="font-size:16px;">{{ tCur.name }}</strong><span style="font-size:14px; color:#4A535E;">{{ tCur.role }}</span></figcaption>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:14px; font-weight:600; margin-right:8px;">{{ tPos }}</span>
+              <button onClick="{{ tPrev }}" aria-label="Previous testimonial" style="width:48px; height:48px; border:1.5px solid #0E1620; border-radius:2px; background:transparent; font-size:18px; cursor:pointer; color:#0E1620;" style-hover="background:#0E1620; color:#FFFFFF;">←</button>
+              <button onClick="{{ tNext }}" aria-label="Next testimonial" style="width:48px; height:48px; border:1.5px solid #0E1620; border-radius:2px; background:transparent; font-size:18px; cursor:pointer; color:#0E1620;" style-hover="background:#0E1620; color:#FFFFFF;">→</button>
+            </div>
+          </div>
+        </figure>
+      </div>
+      <div style="margin-top:clamp(48px,6vw,80px); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px 36px; padding-top:28px; border-top:1px solid #CFC8BA;">
+        <span style="font-size:13px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#4A535E;">Trusted by NT organisations</span>
+        <sc-for list="{{ partners }}" as="p" hint-placeholder-count="5">
+          <span style="font-size:22px; font-stretch:75%; font-weight:800; text-transform:uppercase; color:#7D858F;">{{ p }}</span>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Onsite" style="display:flex; flex-wrap:wrap; background:#0E1620; color:#FFFFFF;">
+    <div style="flex:1 1 480px; position:relative; min-height:clamp(360px,44vw,640px);"><img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1400&q=70" alt="Trainer presenting to a workplace group" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div>
+    <div style="flex:1 1 480px; padding:clamp(48px,6vw,96px) clamp(20px,5vw,80px); display:flex; flex-direction:column; justify-content:center; gap:28px;">
+      <h2 style="margin:0; font-size:clamp(44px,5.5vw,84px); line-height:0.88; font-stretch:72%; font-weight:800; text-transform:uppercase;">We bring the training to your team</h2>
+      <p style="margin:0; font-size:18px; line-height:1.6; color:#C9D3E2; max-width:520px;">Booking for a crew, a department or a whole site? Our trainers deliver at your workplace, tailored to your equipment, hazards and schedule — from Darwin to remote communities.</p>
+      <ul style="list-style:none; margin:0; padding:0; max-width:520px;">
+        <sc-for list="{{ onsite }}" as="i" hint-placeholder-count="4">
+          <li style="padding:12px 0; border-top:1px solid rgba(255,255,255,0.16); font-size:16px; display:flex; gap:14px;"><span style="color:var(--accent,#F28C38); font-weight:700;">—</span><span>{{ i }}</span></li>
+        </sc-for>
+      </ul>
+      <div style="display:flex; flex-wrap:wrap; gap:10px;">
+        <button onClick="{{ goContact }}" style="height:52px; padding:0 22px; background:var(--accent,#F28C38); color:#0E1620; border:none; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Request group training →</button>
+        <button onClick="{{ goCourses }}" style="height:52px; padding:0 22px; background:transparent; color:#FFFFFF; border:1.5px solid rgba(255,255,255,0.6); border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;" style-hover="border-color:#FFFFFF;">View courses</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — How it works + FAQ" style="padding:clamp(64px,9vw,128px) 0;">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px);">
+      <h2 style="margin:0 0 40px; font-size:clamp(48px,7vw,104px); line-height:0.88; font-stretch:72%; font-weight:800; text-transform:uppercase;">Booked in<br>three steps</h2>
+      <ol style="list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); gap:0 28px;">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+          <li style="border-top:2px solid #0E1620; padding:20px 0 0; display:flex; flex-direction:column; gap:10px;">
+            <span style="font-size:14px; font-weight:700; color:#B4561A;">Step {{ s.n }}</span>
+            <h3 style="margin:0; font-size:24px; font-weight:700; letter-spacing:-0.01em;">{{ s.title }}</h3>
+            <p style="margin:0; font-size:16px; line-height:1.55; color:#4A535E; max-width:340px;">{{ s.body }}</p>
+          </li>
+        </sc-for>
+      </ol>
+
+      <div style="margin-top:clamp(72px,9vw,128px); display:flex; flex-wrap:wrap; gap:clamp(32px,5vw,80px); align-items:flex-start;">
+        <div style="flex:1 1 300px; display:flex; flex-direction:column; gap:18px; align-items:flex-start;">
+          <h2 style="margin:0; font-size:clamp(36px,4vw,56px); line-height:1; font-weight:700; letter-spacing:-0.025em;">Questions, answered.</h2>
+          <p style="margin:0; font-size:17px; line-height:1.55; color:#4A535E; max-width:360px;">Can't find what you're after? Our team is happy to help.</p>
+          <button onClick="{{ goContact }}" style="background:none; border:none; padding:0 0 4px; border-bottom:2px solid #0E1620; font-size:16px; font-weight:700; color:#0E1620; cursor:pointer;">Contact us →</button>
+        </div>
+        <div style="flex:2 1 520px; border-top:2px solid #0E1620;">
+          <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="5">
+            <div style="border-bottom:1px solid #D9D3C7;">
+              <button onClick="{{ q.onToggle }}" aria-expanded="{{ q.open }}" style="width:100%; background:none; border:none; padding:22px 0; display:flex; justify-content:space-between; align-items:center; gap:20px; text-align:left; cursor:pointer; font-size:clamp(18px,1.6vw,21px); font-weight:600; color:#0E1620;">
+                <span>{{ q.q }}</span><span style="flex:none; font-size:26px; font-weight:400; line-height:1; color:#B4561A;">{{ q.sign }}</span>
+              </button>
+              <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+                <p style="margin:0 0 24px; font-size:17px; line-height:1.6; color:#3E4753; max-width:640px; animation:fadeUp .2s ease;">{{ q.a }}</p>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Final CTA" style="background:var(--accent,#F28C38); color:#0E1620;">
+    <div style="max-width:1320px; margin:0 auto; padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px); display:flex; flex-wrap:wrap; gap:clamp(36px,5vw,80px); align-items:flex-end;">
+      <h2 style="flex:1.3 1 420px; margin:0; font-size:clamp(60px,9vw,140px); line-height:0.84; font-stretch:72%; font-weight:800; text-transform:uppercase;">Your next skill starts here.</h2>
+      <form onSubmit="{{ quickSubmit }}" style="flex:1 1 360px; display:flex; flex-direction:column; gap:14px;">
+        <p style="margin:0 0 6px; font-size:17px; line-height:1.5; font-weight:500;">Tell us what you need and we'll recommend the right course, session and delivery option.</p>
+        <input aria-label="Full name" placeholder="Full name" value="{{ qName }}" onChange="{{ setQName }}" style="height:54px; padding:0 2px; border:none; border-bottom:2px solid #0E1620; background:transparent; color:#0E1620; outline:none; font-size:18px;">
+        <input aria-label="Email" type="email" placeholder="Email" value="{{ qEmail }}" onChange="{{ setQEmail }}" style="height:54px; padding:0 2px; border:none; border-bottom:2px solid #0E1620; background:transparent; color:#0E1620; outline:none; font-size:18px;">
+        <select aria-label="Course of interest" value="{{ qCourse }}" onChange="{{ setQCourse }}" style="height:54px; padding:0; border:none; border-bottom:2px solid #0E1620; background:transparent; color:#0E1620; font-size:18px;">
+          <option value="">Course of interest — not sure yet</option>
+          <sc-for list="{{ courseOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o }}">{{ o }}</option></sc-for>
+        </select>
+        <button type="submit" style="margin-top:10px; align-self:flex-start; height:56px; padding:0 26px; background:#0E1620; color:#FFFFFF; border:none; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Continue enquiry →</button>
+      </form>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ================= COURSES ================= -->
+<sc-if value="{{ isCourses }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Courses — Header" style="border-bottom:1px solid #D9D3C7;">
+    <div style="max-width:1320px; margin:0 auto; padding:clamp(40px,6vw,88px) clamp(20px,4vw,48px) clamp(32px,4vw,48px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px;">
+      <div>
+        <p style="margin:0 0 18px; font-size:14px; font-weight:600; color:#6A727D;">Home / Courses</p>
+        <h1 style="margin:0; font-size:clamp(64px,10vw,152px); line-height:0.84; font-stretch:72%; font-weight:800; text-transform:uppercase;">Find your<br>course</h1>
+      </div>
+      <p style="margin:0; flex:0 1 400px; font-size:17px; line-height:1.55; color:#3E4753;">Browse by category, check what each course involves and continue to booking when you're ready.</p>
+    </div>
+  </section>
+  <section style="padding:0 0 clamp(64px,8vw,112px);">
+    <div style="position:sticky; top:72px; z-index:20; background:#F4F1EA; border-bottom:1px solid #D9D3C7;">
+      <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px 24px;">
+        <div role="group" aria-label="Filter by category" style="display:flex; flex-wrap:wrap; gap:4px 28px;">
+          <sc-for list="{{ cats }}" as="k" hint-placeholder-count="5">
+            <button onClick="{{ k.onClick }}" aria-pressed="{{ k.active }}" style="background:none; border:none; border-bottom:3px solid {{ k.bar }}; padding:18px 0 15px; font-size:15px; font-weight:{{ k.weight }}; color:#0E1620; cursor:pointer; display:flex; gap:6px; align-items:baseline;">{{ k.label }} <span style="font-size:12px; color:#6A727D;">{{ k.count }}</span></button>
+          </sc-for>
+        </div>
+        <span style="font-size:14px; color:#4A535E; padding:12px 0;">{{ countLabel }}</span>
+      </div>
+    </div>
+    <div style="max-width:1320px; margin:0 auto; padding:clamp(32px,4vw,56px) clamp(20px,4vw,48px) 0; display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr)); gap:48px 28px;">
+      <sc-for list="{{ filtered }}" as="c" hint-placeholder-count="6">
+        <article style="display:flex; flex-direction:column; gap:14px; animation:fadeUp .25s ease;">
+          <button onClick="{{ c.onDetails }}" aria-label="{{ c.title }} details" style="position:relative; aspect-ratio:4/3; overflow:hidden; border:none; padding:0; background:#DCD6CA; cursor:pointer;">
+            <img src="{{ c.src }}" alt="{{ c.alt }}" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+            <span style="position:absolute; top:0; left:0; background:#F4F1EA; padding:8px 12px 8px 0; font-size:13px; font-weight:700; color:#0E1620;">{{ c.num }}</span>
+          </button>
+          <p style="margin:0; font-size:13px; font-weight:600; color:#B4561A; letter-spacing:0.02em;">{{ c.cat }}  ·  {{ c.dur }}  ·  {{ c.mode }}</p>
+          <h3 style="margin:0; font-size:26px; line-height:1.08; font-weight:700; letter-spacing:-0.015em;">{{ c.title }}</h3>
+          <p style="margin:0; font-size:15px; line-height:1.55; color:#4A535E; flex:1;">{{ c.desc }}</p>
+          <div style="display:flex; gap:8px; padding-top:6px;">
+            <button onClick="{{ c.onBook }}" style="height:48px; padding:0 20px; background:var(--accent,#F28C38); border:none; border-radius:2px; color:#0E1620; font-size:15px; font-weight:700; cursor:pointer;" style-hover="filter:brightness(1.06);">Book now →</button>
+            <button onClick="{{ c.onDetails }}" style="height:48px; padding:0 18px; background:transparent; border:1.5px solid #0E1620; border-radius:2px; color:#0E1620; font-size:15px; font-weight:700; cursor:pointer;" style-hover="background:#0E1620; color:#FFFFFF;">Details</button>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+    <div style="max-width:1320px; margin:clamp(64px,8vw,104px) auto 0; padding:0 clamp(20px,4vw,48px);">
+      <div style="background:#0E1620; color:#FFFFFF; padding:clamp(32px,5vw,64px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px;">
+        <h2 style="margin:0; font-size:clamp(36px,5vw,72px); line-height:0.88; font-stretch:72%; font-weight:800; text-transform:uppercase; max-width:640px;">Not sure which course is right?</h2>
+        <div style="display:flex; flex-direction:column; gap:16px; max-width:380px; align-items:flex-start;">
+          <p style="margin:0; font-size:16px; line-height:1.55; color:#C9D3E2;">Tell us about your role or workplace requirements and we'll point you in the right direction.</p>
+          <button onClick="{{ goContact }}" style="height:52px; padding:0 22px; background:var(--accent,#F28C38); color:#0E1620; border:none; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Make an enquiry →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ================= ABOUT ================= -->
+<sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="About — Header">
+    <div style="max-width:1320px; margin:0 auto; padding:clamp(40px,6vw,88px) clamp(20px,4vw,48px) clamp(32px,4vw,56px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px;">
+      <div>
+        <p style="margin:0 0 18px; font-size:14px; font-weight:600; color:#6A727D;">Home / About FAT NT</p>
+        <h1 style="margin:0; font-size:clamp(64px,10vw,152px); line-height:0.84; font-stretch:72%; font-weight:800; text-transform:uppercase;">Local trainers.<br>Practical skills.</h1>
+      </div>
+      <p style="margin:0; flex:0 1 400px; font-size:17px; line-height:1.55; color:#3E4753;">FAT NT provides training for learners and organisations across the Northern Territory.</p>
+    </div>
+    <div style="position:relative; height:clamp(300px,42vw,620px); background:#DCD6CA;"><img src="https://images.unsplash.com/photo-1503428593586-e225b39bddfe?auto=format&fit=crop&w=2000&q=70" alt="Adult learners taking notes in a training session (stock placeholder)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div>
+  </section>
+
+  <section data-screen-label="About — Story" style="padding:clamp(64px,9vw,128px) 0;">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px); display:flex; flex-wrap:wrap; gap:clamp(32px,5vw,96px);">
+      <div style="flex:1.1 1 420px;">
+        <p style="margin:0 0 20px; font-size:14px; font-weight:700; color:#B4561A;">Our story</p>
+        <blockquote style="margin:0; font-size:clamp(30px,3.6vw,52px); line-height:1.08; font-weight:600; letter-spacing:-0.025em;">“Our goal is for every learner to walk out confident they can act when it matters.”</blockquote>
+        <p style="margin:20px 0 0; font-size:15px; color:#4A535E;">— Founder, FAT NT</p>
+      </div>
+      <div style="flex:1 1 380px; display:flex; flex-direction:column; gap:18px; padding-top:clamp(0px,3vw,40px);">
+        <p style="margin:0; font-size:18px; line-height:1.7; color:#2A333E;">FAT NT started with a simple idea: workplace training should be practical, local and easy to access. What began as a handful of first aid sessions has grown into a broad program covering safety, emergency response and wellbeing for workers right across the Territory.</p>
+        <p style="margin:0; font-size:18px; line-height:1.7; color:#2A333E;">We work with individuals building their careers and with employers who need a dependable training partner — from small local businesses to large multi-site operations.</p>
+      </div>
+    </div>
+    <div style="max-width:1320px; margin:clamp(56px,7vw,96px) auto 0; padding:0 clamp(20px,4vw,48px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); border-top:2px solid #0E1620;">
+      <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+        <div style="padding:24px 24px 0 0;">
+          <p style="margin:0; font-size:clamp(56px,6vw,88px); line-height:0.9; font-stretch:72%; font-weight:800;">{{ s.n }}</p>
+          <p style="margin:8px 0 0; font-size:15px; color:#4A535E;">{{ s.label }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="About — Approach" style="background:#0F2340; color:#FFFFFF; padding:clamp(64px,9vw,120px) 0;">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px); display:flex; flex-wrap:wrap; gap:clamp(32px,5vw,80px);">
+      <h2 style="flex:1 1 320px; margin:0; font-size:clamp(48px,7vw,104px); line-height:0.88; font-stretch:72%; font-weight:800; text-transform:uppercase;">How we<br><span style="color:var(--accent,#F28C38);">train</span></h2>
+      <div style="flex:1.6 1 480px;">
+        <sc-for list="{{ values }}" as="v" hint-placeholder-count="4">
+          <div style="display:flex; flex-wrap:wrap; gap:8px 28px; padding:24px 0; border-top:1px solid rgba(255,255,255,0.2);">
+            <span style="flex:0 0 40px; font-size:14px; font-weight:700; color:var(--accent,#F28C38); padding-top:6px;">{{ v.n }}</span>
+            <h3 style="flex:0 0 220px; margin:0; font-size:28px; font-stretch:75%; font-weight:800; text-transform:uppercase;">{{ v.title }}</h3>
+            <p style="flex:1 1 240px; margin:0; font-size:17px; line-height:1.55; color:#C9D3E2;">{{ v.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="About — Photos" style="padding:clamp(12px,1.2vw,16px) 0 0;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:clamp(12px,1.2vw,16px); padding:0 clamp(12px,1.2vw,16px);">
+      <sc-for list="{{ photos }}" as="p" hint-placeholder-count="3">
+        <div style="position:relative; aspect-ratio:{{ p.ratio }}; overflow:hidden; background:#DCD6CA;"><img src="{{ p.src }}" alt="{{ p.alt }}" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="About — Team" style="padding:clamp(64px,9vw,128px) 0;">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px);">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px; margin-bottom:40px;">
+        <h2 style="margin:0; font-size:clamp(48px,7vw,104px); line-height:0.88; font-stretch:72%; font-weight:800; text-transform:uppercase;">Meet the<br>trainers</h2>
+        <p style="margin:0; flex:0 1 400px; font-size:17px; line-height:1.55; color:#3E4753;">Every trainer has worked in the industries they teach — paramedics, site safety officers and wellbeing specialists.</p>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr)); gap:40px 20px;">
+        <sc-for list="{{ team }}" as="m" hint-placeholder-count="4">
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="position:relative; aspect-ratio:4/5; overflow:hidden; background:#DCD6CA;"><img src="{{ m.src }}" alt="{{ m.name }}" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:grayscale(1) contrast(1.05); transition:filter .3s ease;" style-hover="filter:none;"></div>
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; border-top:1.5px solid #0E1620; padding-top:12px;">
+              <h3 style="margin:0; font-size:20px; font-weight:700;">{{ m.name }}</h3>
+              <span style="font-size:13px; font-weight:700; color:#B4561A; text-align:right;">{{ m.role }}</span>
+            </div>
+            <p style="margin:0; font-size:15px; line-height:1.5; color:#4A535E;">{{ m.bio }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--accent,#F28C38); color:#0E1620;">
+    <div style="max-width:1320px; margin:0 auto; padding:clamp(56px,7vw,96px) clamp(20px,4vw,48px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:28px;">
+      <h2 style="margin:0; font-size:clamp(48px,7vw,112px); line-height:0.86; font-stretch:72%; font-weight:800; text-transform:uppercase; max-width:780px;">Find the right training for your team.</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:10px;">
+        <button onClick="{{ goCourses }}" style="height:56px; padding:0 24px; background:#0E1620; color:#FFFFFF; border:none; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">View courses →</button>
+        <button onClick="{{ goContact }}" style="height:56px; padding:0 24px; background:transparent; color:#0E1620; border:1.5px solid #0E1620; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Contact us</button>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ================= BOOK ================= -->
+<sc-if value="{{ isBook }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Book — Header" style="border-bottom:1px solid #D9D3C7;">
+    <div style="max-width:1320px; margin:0 auto; padding:clamp(40px,6vw,88px) clamp(20px,4vw,48px) clamp(32px,4vw,48px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px;">
+      <div>
+        <p style="margin:0 0 18px; font-size:14px; font-weight:600; color:#6A727D;">Home / Book a course</p>
+        <h1 style="margin:0; font-size:clamp(64px,10vw,152px); line-height:0.84; font-stretch:72%; font-weight:800; text-transform:uppercase;">Book your<br>course</h1>
+      </div>
+      <p style="margin:0; flex:0 1 400px; font-size:17px; line-height:1.55; color:#3E4753;">Bookings are completed through the Allens Training booking system. Choose your course, then continue to secure your place.</p>
+    </div>
+  </section>
+  <section style="padding:clamp(40px,6vw,80px) 0 clamp(64px,8vw,112px);">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px); display:flex; flex-wrap:wrap; gap:clamp(32px,4vw,64px); align-items:flex-start;">
+      <ol style="flex:2 1 560px; list-style:none; margin:0; padding:0; display:flex; flex-direction:column;">
+        <li style="border-top:2px solid #0E1620; padding:24px 0 36px; display:flex; flex-wrap:wrap; gap:12px 28px;">
+          <span style="flex:0 0 48px; font-size:48px; line-height:0.9; font-stretch:72%; font-weight:800;">01</span>
+          <div style="flex:1 1 320px; display:flex; flex-direction:column; gap:12px;">
+            <h2 style="margin:0; font-size:26px; font-weight:700; letter-spacing:-0.01em;">Choose your course</h2>
+            <sc-if value="{{ hasBookCourse }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FFFFFF; padding:16px; display:flex; flex-wrap:wrap; align-items:center; gap:16px; animation:fadeUp .25s ease;">
+                <div style="flex:0 0 96px; height:68px; background-color:#DCD6CA; background-size:cover; background-position:center; background-image:{{ bookCourseBg }};"></div>
+                <div style="flex:1 1 200px;">
+                  <p style="margin:0; font-size:13px; font-weight:600; color:#B4561A;">Selected course</p>
+                  <p style="margin:2px 0 0; font-size:20px; font-weight:700;">{{ bookCourseTitle }}</p>
+                </div>
+                <button onClick="{{ clearBookCourse }}" style="background:none; border:none; border-bottom:1.5px solid #0E1620; font-size:14px; font-weight:700; color:#0E1620; cursor:pointer; padding:4px 0;">Change</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ noBookCourse }}" hint-placeholder-val="{{ true }}">
+              <p style="margin:0; font-size:16px; line-height:1.55; color:#4A535E;">Find the course you need on the Courses page and check its details. <button onClick="{{ goCourses }}" style="background:none; border:none; padding:0; border-bottom:1.5px solid #0E1620; font-size:16px; font-weight:700; color:#0E1620; cursor:pointer;">Browse courses →</button></p>
+            </sc-if>
+          </div>
+        </li>
+        <li style="border-top:2px solid #0E1620; padding:24px 0 36px; display:flex; flex-wrap:wrap; gap:12px 28px;">
+          <span style="flex:0 0 48px; font-size:48px; line-height:0.9; font-stretch:72%; font-weight:800;">02</span>
+          <div style="flex:1 1 320px; display:flex; flex-direction:column; gap:16px;">
+            <h2 style="margin:0; font-size:26px; font-weight:700; letter-spacing:-0.01em;">Continue to the booking system</h2>
+            <div style="background:#FFFFFF; border:1.5px dashed #9AA3AE; padding:clamp(24px,4vw,44px); display:flex; flex-direction:column; align-items:flex-start; gap:14px;">
+              <p style="margin:0; font-size:16px; line-height:1.6; color:#3E4753; max-width:480px;">You'll be taken to the Allens Training booking system to view available sessions and complete your booking.</p>
+              <button onClick="{{ openExternal }}" style="height:58px; padding:0 28px; background:var(--accent,#F28C38); color:#0E1620; border:none; border-radius:2px; font-size:18px; font-weight:700; cursor:pointer;" style-hover="filter:brightness(1.06);">Continue to booking →</button>
+              <p style="margin:0; font-size:13px; color:#6A727D;">[Allens Training Booking Link]</p>
+              <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+                <p style="margin:0; font-size:13px; line-height:1.5; color:#6A727D; max-width:480px;">Integration area — can hold an external link, embedded booking interface or widget once details are supplied.</p>
+              </sc-if>
+            </div>
+          </div>
+        </li>
+        <li style="border-top:2px solid #0E1620; border-bottom:1px solid #D9D3C7; padding:24px 0 36px; display:flex; flex-wrap:wrap; gap:12px 28px;">
+          <span style="flex:0 0 48px; font-size:48px; line-height:0.9; font-stretch:72%; font-weight:800; color:#9AA3AE;">03</span>
+          <div style="flex:1 1 320px; display:flex; flex-direction:column; gap:8px;">
+            <h2 style="margin:0; font-size:26px; font-weight:700; letter-spacing:-0.01em;">Complete your booking</h2>
+            <p style="margin:0; font-size:16px; line-height:1.55; color:#4A535E;">Choose an available session and follow the prompts to confirm your place.</p>
+          </div>
+        </li>
+      </ol>
+      <aside style="flex:1 1 300px; display:flex; flex-direction:column; gap:16px; position:sticky; top:96px;">
+        <div style="background:#0E1620; color:#FFFFFF; padding:28px; display:flex; flex-direction:column; gap:14px;">
+          <h2 style="margin:0; font-size:32px; line-height:0.95; font-stretch:75%; font-weight:800; text-transform:uppercase;">Need help booking?</h2>
+          <p style="margin:0; font-size:15px; line-height:1.55; color:#C9D3E2;">Unsure which course to choose, or booking for a group? Talk to us first.</p>
+          <p style="margin:4px 0 0; font-size:26px; font-weight:700;">(08) 8900 0000</p>
+          <button onClick="{{ goContact }}" style="height:50px; background:var(--accent,#F28C38); color:#0E1620; border:none; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Send an enquiry →</button>
+        </div>
+        <div style="border-top:1.5px solid #0E1620; padding-top:18px;">
+          <h2 style="margin:0 0 12px; font-size:15px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;">Before you book</h2>
+          <ul style="list-style:none; margin:0; padding:0; font-size:15px; line-height:1.5; color:#3E4753;">
+            <li style="padding:8px 0; border-bottom:1px solid #D9D3C7;">Have the learner's details ready</li>
+            <li style="padding:8px 0; border-bottom:1px solid #D9D3C7;">Check course requirements in the details</li>
+            <li style="padding:8px 0; border-bottom:1px solid #D9D3C7;">Booking for a group? Get in touch first</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ================= CONTACT ================= -->
+<sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Contact — Header" style="border-bottom:1px solid #D9D3C7;">
+    <div style="max-width:1320px; margin:0 auto; padding:clamp(40px,6vw,88px) clamp(20px,4vw,48px) clamp(32px,4vw,48px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px;">
+      <div>
+        <p style="margin:0 0 18px; font-size:14px; font-weight:600; color:#6A727D;">Home / Contact</p>
+        <h1 style="margin:0; font-size:clamp(64px,10vw,152px); line-height:0.84; font-stretch:72%; font-weight:800; text-transform:uppercase;">Get in<br>touch</h1>
+      </div>
+      <p style="margin:0; flex:0 1 400px; font-size:17px; line-height:1.55; color:#3E4753;">Questions about a course, group training or booking? Send us a message and we'll get back to you within one business day.</p>
+    </div>
+  </section>
+  <section style="padding:clamp(40px,6vw,80px) 0 clamp(64px,8vw,112px);">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px); display:flex; flex-wrap:wrap; gap:clamp(40px,5vw,96px); align-items:flex-start;">
+      <aside style="flex:1 1 340px; display:flex; flex-direction:column; gap:0;">
+        <sc-for list="{{ contactRows }}" as="r" hint-placeholder-count="4">
+          <div style="border-top:1.5px solid #0E1620; padding:16px 0 22px; display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:13px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#6A727D;">{{ r.label }}</span>
+            <span style="font-size:clamp(22px,2.2vw,30px); font-weight:600; letter-spacing:-0.015em;">{{ r.value }}</span>
+          </div>
+        </sc-for>
+        <div style="border-top:1.5px solid #0E1620; padding-top:16px; display:flex; flex-wrap:wrap; gap:8px 20px;">
+          <sc-for list="{{ socials }}" as="s" hint-placeholder-count="3">
+            <span style="font-size:15px; font-weight:700; border-bottom:1.5px solid #0E1620; padding-bottom:2px;">{{ s }} ↗</span>
+          </sc-for>
+        </div>
+        <div style="margin-top:36px; position:relative; aspect-ratio:16/10; overflow:hidden; background:#0E1620;">
+          <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=900&q=70" alt="Training room" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.7;">
+          <div style="position:absolute; left:0; right:0; bottom:0; padding:20px; color:#FFFFFF;">
+            <p style="margin:0; font-size:30px; line-height:0.95; font-stretch:75%; font-weight:800; text-transform:uppercase;">Training across the NT</p>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.5; color:#E4E7EB;">Darwin · Palmerston · Katherine · Alice Springs · remote sites</p>
+          </div>
+        </div>
+      </aside>
+      <div style="flex:1.5 1 480px;">
+        <sc-if value="{{ formDone }}" hint-placeholder-val="{{ false }}">
+          <div role="status" style="display:flex; flex-direction:column; align-items:flex-start; gap:16px; animation:fadeUp .3s ease; border-top:2px solid #0E1620; padding-top:28px;">
+            <h2 style="margin:0; font-size:clamp(40px,5vw,72px); line-height:0.9; font-stretch:72%; font-weight:800; text-transform:uppercase;">Thanks, {{ firstName }}.<br>Message received.</h2>
+            <p style="margin:0; font-size:17px; line-height:1.6; color:#3E4753; max-width:520px;">We'll reply to <strong>{{ form.email.value }}</strong> as soon as possible.</p>
+            <p style="margin:0; font-size:13px; color:#6A727D;">Prototype: submission simulated — no message was sent.</p>
+            <button onClick="{{ resetForm }}" style="height:48px; padding:0 20px; background:transparent; border:1.5px solid #0E1620; border-radius:2px; color:#0E1620; font-size:15px; font-weight:700; cursor:pointer;">Send another message</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ submit }}" novalidate="novalidate" style="background:#FFFFFF; padding:clamp(24px,4vw,48px); display:flex; flex-direction:column; gap:22px;">
+            <h2 style="margin:0; font-size:28px; font-weight:700; letter-spacing:-0.015em;">Send an enquiry</h2>
+            <sc-if value="{{ hasErrors }}" hint-placeholder-val="{{ false }}">
+              <div role="alert" style="background:#FCEDEA; color:#8E2A1B; padding:12px 14px; font-size:15px;">Please check the highlighted fields.</div>
+            </sc-if>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:22px;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label for="f-name" style="font-size:14px; font-weight:700;">Full name <span style="color:#B4321F;">*</span></label>
+                <input id="f-name" type="text" autocomplete="name" value="{{ form.name.value }}" onChange="{{ form.name.onChange }}" aria-invalid="{{ form.name.hasError }}" style="height:52px; padding:0 14px; border:1.5px solid {{ form.name.border }}; border-radius:2px; background:#F8F6F1; color:#0E1620; outline:none;" style-focus="border-color:#0E1620; background:#FFFFFF;">
+                <span style="font-size:13px; color:#B4321F;">{{ form.name.error }}</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label for="f-email" style="font-size:14px; font-weight:700;">Email <span style="color:#B4321F;">*</span></label>
+                <input id="f-email" type="email" autocomplete="email" value="{{ form.email.value }}" onChange="{{ form.email.onChange }}" aria-invalid="{{ form.email.hasError }}" style="height:52px; padding:0 14px; border:1.5px solid {{ form.email.border }}; border-radius:2px; background:#F8F6F1; color:#0E1620; outline:none;" style-focus="border-color:#0E1620; background:#FFFFFF;">
+                <span style="font-size:13px; color:#B4321F;">{{ form.email.error }}</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label for="f-phone" style="font-size:14px; font-weight:700;">Phone <span style="font-weight:400; color:#6A727D;">(optional)</span></label>
+                <input id="f-phone" type="tel" autocomplete="tel" value="{{ form.phone.value }}" onChange="{{ form.phone.onChange }}" aria-invalid="{{ form.phone.hasError }}" style="height:52px; padding:0 14px; border:1.5px solid {{ form.phone.border }}; border-radius:2px; background:#F8F6F1; color:#0E1620; outline:none;" style-focus="border-color:#0E1620; background:#FFFFFF;">
+                <span style="font-size:13px; color:#B4321F;">{{ form.phone.error }}</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label for="f-course" style="font-size:14px; font-weight:700;">Course <span style="font-weight:400; color:#6A727D;">(optional)</span></label>
+                <select id="f-course" value="{{ form.course.value }}" onChange="{{ form.course.onChange }}" style="height:52px; padding:0 12px; border:1.5px solid #D9D3C7; border-radius:2px; background:#F8F6F1; color:#0E1620;">
+                  <option value="">General enquiry</option>
+                  <sc-for list="{{ courseOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o }}">{{ o }}</option></sc-for>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <label for="f-msg" style="font-size:14px; font-weight:700;">Message <span style="color:#B4321F;">*</span></label>
+              <textarea id="f-msg" rows="6" value="{{ form.message.value }}" onChange="{{ form.message.onChange }}" aria-invalid="{{ form.message.hasError }}" style="padding:14px; border:1.5px solid {{ form.message.border }}; border-radius:2px; background:#F8F6F1; color:#0E1620; resize:vertical; outline:none; line-height:1.5;" style-focus="border-color:#0E1620; background:#FFFFFF;"></textarea>
+              <span style="font-size:13px; color:#B4321F;">{{ form.message.error }}</span>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:16px;">
+              <button type="submit" disabled="{{ sending }}" style="height:56px; padding:0 28px; min-width:200px; background:var(--accent,#F28C38); color:#0E1620; border:none; border-radius:2px; font-size:17px; font-weight:700; cursor:pointer;">{{ submitLabel }}</button>
+              <span style="font-size:13px; color:#6A727D;">* Required</span>
+            </div>
+          </form>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+</main>
+
+<footer style="background:#0E1620; color:#C8CDD4; padding:clamp(56px,7vw,88px) 0 {{ footerPad }}; overflow:hidden;">
+  <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,4vw,48px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr)); gap:36px;">
+    <p style="margin:0; font-size:20px; line-height:1.4; font-weight:500; color:#FFFFFF; max-width:300px;">Practical training for learners and workplaces in the Northern Territory.</p>
+    <nav aria-label="Footer" style="display:flex; flex-direction:column; gap:10px;">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+        <button onClick="{{ n.onClick }}" style="background:none; border:none; padding:2px 0; text-align:left; font-size:15px; color:#C8CDD4; cursor:pointer;" style-hover="color:#FFFFFF;">{{ n.label }}</button>
+      </sc-for>
+    </nav>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <sc-for list="{{ contactRows }}" as="r" hint-placeholder-count="4">
+        <span style="font-size:15px;">{{ r.value }}</span>
+      </sc-for>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <sc-for list="{{ socials }}" as="s" hint-placeholder-count="3">
+        <span style="font-size:15px;">{{ s }} ↗</span>
+      </sc-for>
+    </div>
+  </div>
+  <div style="max-width:1320px; margin:clamp(40px,6vw,72px) auto 0; padding:0 clamp(20px,4vw,48px); display:flex; align-items:flex-end; gap:clamp(8px,1vw,16px);">
+    <span style="font-size:clamp(120px,26vw,380px); line-height:0.74; font-stretch:72%; font-weight:900; color:#FFFFFF; letter-spacing:-0.02em;">FAT</span>
+    <span style="font-size:clamp(48px,10vw,150px); line-height:0.74; font-stretch:72%; font-weight:900; color:#0E1620; background:var(--accent,#F28C38); padding:0.08em 0.1em 0.02em;">NT</span>
+  </div>
+  <div style="max-width:1320px; margin:32px auto 0; padding:20px clamp(20px,4vw,48px) 0; border-top:1px solid #26313F; display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; font-size:13px; color:#8C95A1;">
+    <span>© 2026 FAT NT. All rights reserved.</span>
+    <span>Website concept by True Blue IT Services Pty Ltd</span>
+  </div>
+</footer>
+
+<sc-if value="{{ showMobileBar }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed; left:0; right:0; bottom:0; z-index:35; background:#F4F1EA; border-top:1px solid #D9D3C7; padding:10px 16px calc(10px + env(safe-area-inset-bottom)); display:flex; gap:8px;">
+    <button onClick="{{ goCourses }}" style="flex:1; height:50px; background:transparent; color:#0E1620; border:1.5px solid #0E1620; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Courses</button>
+    <button onClick="{{ goBook }}" style="flex:1.4; height:50px; background:var(--accent,#F28C38); color:#0E1620; border:none; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Book a course →</button>
+  </div>
+</sc-if>
+
+<sc-if value="{{ hasModalCourse }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed; inset:0; z-index:60; background:rgba(14,22,32,0.7); display:flex; align-items:center; justify-content:center; padding:16px;">
+    <div role="dialog" aria-modal="true" aria-label="Course details" onClick="{{ stop }}" style="background:#F4F1EA; width:100%; max-width:760px; max-height:90vh; overflow:auto; animation:fadeUp .2s ease;">
+      <div role="img" aria-label="{{ modal.alt }}" style="position:relative; aspect-ratio:21/9; background-color:#DCD6CA; background-size:cover; background-position:center; background-image:{{ modal.bg }};">
+        <button onClick="{{ closeModal }}" aria-label="Close" style="position:absolute; top:0; right:0; width:52px; height:52px; border:none; background:#0E1620; color:#FFFFFF; font-size:22px; cursor:pointer;">×</button>
+      </div>
+      <div style="padding:clamp(24px,4vw,40px); display:flex; flex-direction:column; gap:18px;">
+        <p style="margin:0; font-size:13px; font-weight:700; color:#B4561A;">{{ modal.cat }} · Sample course</p>
+        <h2 style="margin:0; font-size:clamp(40px,5vw,64px); line-height:0.88; font-stretch:72%; font-weight:800; text-transform:uppercase;">{{ modal.title }}</h2>
+        <p style="margin:0; font-size:17px; line-height:1.6; color:#3E4753;">{{ modal.desc }}</p>
+        <dl style="margin:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr)); border-top:1.5px solid #0E1620;">
+          <sc-for list="{{ modalFacts }}" as="x" hint-placeholder-count="4">
+            <div style="padding:14px 14px 0 0;">
+              <dt style="font-size:12px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#6A727D;">{{ x.k }}</dt>
+              <dd style="margin:6px 0 0; font-size:16px; font-weight:700;">{{ x.v }}</dd>
+            </div>
+          </sc-for>
+        </dl>
+        <div style="display:flex; flex-wrap:wrap; gap:10px; padding-top:8px;">
+          <button onClick="{{ modal.onBook }}" style="flex:1 1 180px; height:54px; background:var(--accent,#F28C38); color:#0E1620; border:none; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Book now →</button>
+          <button onClick="{{ modal.onEnquire }}" style="flex:1 1 180px; height:54px; background:transparent; color:#0E1620; border:1.5px solid #0E1620; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Enquire about this course</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ showExternal }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeExternal }}" style="position:fixed; inset:0; z-index:60; background:rgba(14,22,32,0.7); display:flex; align-items:center; justify-content:center; padding:16px;">
+    <div role="dialog" aria-modal="true" aria-label="Booking link placeholder" onClick="{{ stop }}" style="background:#F4F1EA; width:100%; max-width:520px; padding:clamp(24px,4vw,40px); display:flex; flex-direction:column; gap:14px; animation:fadeUp .2s ease;">
+      <p style="margin:0; font-size:13px; font-weight:700; color:#B4561A;">Prototype placeholder</p>
+      <h2 style="margin:0; font-size:40px; line-height:0.9; font-stretch:72%; font-weight:800; text-transform:uppercase;">This would open the booking system</h2>
+      <p style="margin:0; font-size:16px; line-height:1.6; color:#3E4753;">On the live site this button links to <strong>[Allens Training Booking Link]</strong>{{ externalCourse }}. The integration will be configured once details are supplied.</p>
+      <button onClick="{{ closeExternal }}" style="margin-top:6px; height:52px; background:#0E1620; color:#FFFFFF; border:none; border-radius:2px; font-size:16px; font-weight:700; cursor:pointer;">Got it</button>
+    </div>
+  </div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F28C38&quot;,&quot;options&quot;:[&quot;#F28C38&quot;,&quot;#2BB3A3&quot;,&quot;#F2B33D&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Brand&quot;},&quot;showNotes&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Review&quot;},&quot;startPage&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;home&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;courses&quot;,&quot;about&quot;,&quot;book&quot;,&quot;contact&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Review&quot;}}">
+class Component extends DCLogic {
+  state = {
+    page: this.props.startPage ?? 'home',
+    w: typeof window !== 'undefined' ? window.innerWidth : 1280,
+    menuOpen: false, cat: 'All', modalId: null, bookId: null, external: false,
+    form: { name: '', email: '', phone: '', course: '', message: '' },
+    errors: {}, sending: false, done: false, faq: 0, qName: '', qEmail: '', qCourse: '',
+    finderCat: 'All', t: 0
+  };
+
+  courses = [
+    { id: 1, dur: '1 day', mode: 'Face-to-face', src: 'https://images.unsplash.com/photo-1622115297822-a3798fdbe1f6?auto=format&fit=crop&w=900&q=70', title: 'First Aid Fundamentals', cat: 'First Aid', desc: 'Core first aid knowledge and hands-on practice for everyday and workplace situations.' },
+    { id: 2, dur: '3 hours', mode: 'Face-to-face', src: 'https://images.unsplash.com/photo-1755549746563-a7c0a391af36?auto=format&fit=crop&w=900&q=70', title: 'CPR Refresher', cat: 'First Aid', desc: 'A focused session to refresh practical resuscitation skills.' },
+    { id: 3, dur: 'Half day', mode: 'Onsite or classroom', src: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=900&q=70', title: 'Workplace Safety Induction', cat: 'Workplace Safety', desc: 'Foundation safety awareness for new and existing team members.' },
+    { id: 4, dur: 'Half day', mode: 'Face-to-face', src: 'https://images.unsplash.com/photo-1622115585848-1d5b6e8af4e4?auto=format&fit=crop&w=900&q=70', title: 'Manual Handling Awareness', cat: 'Workplace Safety', desc: 'Practical techniques to reduce the risk of strain and injury at work.' },
+    { id: 5, dur: 'Half day', mode: 'Onsite', src: 'https://images.unsplash.com/photo-1649260257572-91bf6f94cff6?auto=format&fit=crop&w=900&q=70', title: 'Fire Safety & Evacuation', cat: 'Emergency Response', desc: 'Responding to fire emergencies and supporting a safe evacuation.' },
+    { id: 6, dur: '1 day', mode: 'Classroom', src: 'https://images.unsplash.com/photo-1664382953518-4a664ab8a8c9?auto=format&fit=crop&w=900&q=70', title: 'Mental Health Awareness', cat: 'Wellbeing', desc: 'Recognising signs of distress and knowing how to offer support.' },
+    { id: 7, dur: '1 day', mode: 'Face-to-face', src: 'https://images.unsplash.com/photo-1734174040265-ef440f9373dc?auto=format&fit=crop&w=900&q=70', title: 'Emergency Response Basics', cat: 'Emergency Response', desc: 'Staying calm and acting effectively in the first minutes of an incident.' },
+    { id: 8, dur: '2 days', mode: 'Classroom', src: 'https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&w=900&q=70', title: 'Supervisor Safety Essentials', cat: 'Workplace Safety', desc: 'Safety responsibilities and communication for team leaders.' }
+  ];
+
+  testimonials = [
+    { quote: 'The trainer made it really practical. I left feeling genuinely confident I could help someone in an emergency.', name: 'Kate R.', role: 'Hospitality worker, Darwin' },
+    { quote: 'Booked our whole crew in for onsite training. Easy to organise and the content was spot on for our site.', name: 'Michael T.', role: 'Site supervisor, Katherine' },
+    { quote: 'Friendly, well run and straight to the point. The CPR refresher was exactly what I needed.', name: 'Priya S.', role: 'Childcare educator, Palmerston' }
+  ];
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    this.onKey = e => { if (e.key === 'Escape') this.setState({ modalId: null, external: false, menuOpen: false }); };
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.onKey);
+  }
+  componentDidUpdate(prev) {
+    if (prev.startPage !== this.props.startPage && this.props.startPage) this.go(this.props.startPage);
+  }
+
+  go(page, extra = {}) {
+    this.setState({ page, menuOpen: false, modalId: null, external: false, ...extra });
+    try { window.scrollTo({ top: 0 }); } catch (e) {}
+  }
+
+  validate(f) {
+    const e = {};
+    if (!f.name.trim()) e.name = 'Please enter your full name.';
+    if (!f.email.trim()) e.email = 'Please enter your email address.';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.trim())) e.email = 'Please enter a valid email, e.g. name@example.com.';
+    if (f.phone.trim() && !/^[+()\d\s-]{8,}$/.test(f.phone.trim())) e.phone = 'Please enter a valid phone number, or leave blank.';
+    if (!f.message.trim()) e.message = 'Please enter a message.';
+    else if (f.message.trim().length < 10) e.message = 'Please add a little more detail (10+ characters).';
+    return e;
+  }
+
+  card(c, i) {
+    return {
+      ...c, alt: c.title + ' — stock placeholder image', bg: 'url(' + c.src + ')',
+      num: String((i ?? this.courses.indexOf(c)) + 1).padStart(2, '0'),
+      onDetails: () => this.setState({ modalId: c.id }),
+      onBook: () => this.go('book', { bookId: c.id }),
+      onEnquire: () => this.go('contact', { form: { ...this.state.form, course: c.title }, done: false, errors: {} })
+    };
+  }
+
+  renderVals() {
+    const s = this.state, p = s.page;
+    const isMobile = s.w < 980;
+    const pages = [['home', 'Home'], ['courses', 'Courses'], ['about', 'About'], ['book', 'Book'], ['contact', 'Contact']];
+    const nav = pages.map(([id, label]) => ({
+      label, onClick: () => this.go(id),
+      weight: p === id ? 700 : 500,
+      bar: p === id ? 'var(--accent,#F28C38)' : 'transparent'
+    }));
+    const realCats = Array.from(new Set(this.courses.map(c => c.cat)));
+    const catNames = ['All', ...realCats];
+    const countOf = k => k === 'All' ? this.courses.length : this.courses.filter(c => c.cat === k).length;
+    const cats = catNames.map(k => {
+      const a = s.cat === k;
+      return { label: k === 'All' ? 'All courses' : k, active: a, count: countOf(k), onClick: () => this.setState({ cat: k }),
+        weight: a ? 700 : 500, bar: a ? 'var(--accent,#F28C38)' : 'transparent' };
+    });
+    const filtered = this.courses.filter(c => s.cat === 'All' || c.cat === s.cat).map(c => this.card(c));
+    const mc = this.courses.find(c => c.id === s.modalId);
+    const bc = this.courses.find(c => c.id === s.bookId);
+    const field = k => ({
+      value: s.form[k], error: s.errors[k] || '', hasError: !!s.errors[k],
+      border: s.errors[k] ? '#B4321F' : '#D9D3C7',
+      onChange: e => { const v = e.target.value; this.setState(st => ({ form: { ...st.form, [k]: v }, errors: { ...st.errors, [k]: undefined } })); }
+    });
+    const contactRows = [
+      { label: 'Phone', value: '(08) 8900 0000' },
+      { label: 'Email', value: 'hello@fatnt.com.au' },
+      { label: 'Address', value: 'Darwin NT 0800' },
+      { label: 'Hours', value: 'Mon–Fri, 8am – 5pm' }
+    ];
+    const T = this.testimonials, ti = s.t % T.length;
+    return {
+      accent: this.props.accent ?? '#F28C38',
+      showNotes: this.props.showNotes ?? true,
+      isMobile, isDesktop: !isMobile, menuOpen: s.menuOpen, showMobileMenu: isMobile && s.menuOpen,
+      toggleMenu: () => this.setState({ menuOpen: !s.menuOpen }),
+      nav,
+      isHome: p === 'home', isCourses: p === 'courses', isAbout: p === 'about', isBook: p === 'book', isContact: p === 'contact',
+      goHome: () => this.go('home'), goCourses: () => this.go('courses'), goAbout: () => this.go('about'),
+      goBook: () => this.go('book'), goContact: () => this.go('contact'),
+      showMobileBar: isMobile && p !== 'book' && p !== 'contact',
+      footerPad: isMobile && p !== 'book' && p !== 'contact' ? '108px' : '32px',
+      catNames, finderCat: s.finderCat,
+      setFinderCat: e => this.setState({ finderCat: e.target.value }),
+      finderSubmit: e => { e.preventDefault(); this.go('courses', { cat: s.finderCat }); },
+      catStrip: realCats.map(k => ({ label: k, count: String(countOf(k)).padStart(2, '0') + ' courses', onClick: () => this.go('courses', { cat: k }) })),
+      featuredRows: this.courses.slice(0, 5).map((c, i) => this.card(c, i)),
+      handsOn: ['Small class sizes so everyone gets practice time', 'Realistic equipment and workplace scenarios', 'Trainers with real industry experience', 'Clear guidance on what to expect before you arrive'].map((t, i) => ({ t, n: String(i + 1).padStart(2, '0') })),
+      onsite: ['Training delivered at your site or ours', 'Content tailored to your workplace hazards', 'Flexible scheduling including weekends', 'One point of contact for the whole booking'],
+      steps: [
+        { n: '1', title: 'Explore courses', body: 'Browse the course list and read the details for each option.' },
+        { n: '2', title: 'Pick what fits', body: 'Choose the training that suits your needs — or contact us for advice.' },
+        { n: '3', title: 'Continue to booking', body: 'Complete your booking through the Allens Training booking system.' }
+      ],
+      cats, filtered,
+      countLabel: 'Showing ' + filtered.length + (filtered.length === 1 ? ' course' : ' courses'),
+      values: [
+        { title: 'Hands-on', body: 'Learning by doing, with time to practise and ask questions.' },
+        { title: 'Accessible', body: 'Clear information and a straightforward path to booking.' },
+        { title: 'Supportive', body: 'A welcoming environment for learners of all backgrounds.' },
+        { title: 'Workplace-focused', body: 'Training connected to real tasks and real environments.' }
+      ].map((v, i) => ({ ...v, n: String(i + 1).padStart(2, '0') })),
+      photos: [
+        { src: 'https://images.unsplash.com/photo-1755548376576-e045f6e01773?auto=format&fit=crop&w=1000&q=70', alt: 'Trainer-led demonstration', ratio: '4/5' },
+        { src: 'https://images.unsplash.com/photo-1755549746560-f56c7bd0c82f?auto=format&fit=crop&w=1000&q=70', alt: 'Learners practising skills', ratio: '4/5' },
+        { src: 'https://images.unsplash.com/photo-1664382953481-141e97ad9825?auto=format&fit=crop&w=1000&q=70', alt: 'Workplace training setting', ratio: '4/5' }
+      ],
+      team: [
+        { name: 'Sarah Mitchell', role: 'Lead First Aid Trainer', bio: 'Former paramedic with a passion for practical, confidence-building training.', src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=70' },
+        { name: 'James Walker', role: 'WHS Trainer', bio: 'Brings years of site safety experience from construction and resources.', src: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=70' },
+        { name: 'Emma Nguyen', role: 'Wellbeing Facilitator', bio: 'Specialises in mental health awareness for teams and leaders.', src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=70' },
+        { name: 'Daniel Brooks', role: 'Training Coordinator', bio: 'Your first point of contact for bookings and group training.', src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=70' }
+      ],
+      stats: [{ n: '2,500+', label: 'Learners trained' }, { n: '120+', label: 'Workplaces supported' }, { n: '15+', label: 'Courses available' }, { n: '4.9', label: 'Average learner rating' }],
+      bundles: [
+        { tag: 'Most popular', title: 'First Aid + CPR', items: ['First Aid Fundamentals', 'CPR Refresher', 'Practical scenario assessment', 'Digital certificate on completion'], save: 'Save 15%' },
+        { tag: 'New starters', title: 'Workplace Ready', items: ['Workplace Safety Induction', 'Manual Handling Awareness', 'Fire Safety & Evacuation', 'Completed in two days'], save: 'Save 20%' },
+        { tag: 'Team leaders', title: 'Safe Teams', items: ['Supervisor Safety Essentials', 'Mental Health Awareness', 'Emergency Response Basics', 'Team-based activities'], save: 'Save 20%' }
+      ],
+      industries: [
+        { title: 'Mining & Resources', body: 'Safety and emergency skills for site crews.', src: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=70' },
+        { title: 'Construction', body: 'Induction, manual handling and site safety.', src: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=900&q=70' },
+        { title: 'Hospitality & Tourism', body: 'First aid and safety for front-line teams.', src: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=70' },
+        { title: 'Health & Community', body: 'Practical care skills for support workers.', src: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=70' },
+        { title: 'Education & Childcare', body: 'First aid and wellbeing for educators.', src: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=70' },
+        { title: 'Government & Corporate', body: 'Workplace health, safety and leadership.', src: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=900&q=70' }
+      ].map((d, i) => ({ ...d, num: String(i + 1).padStart(2, '0'), span: i === 0 && s.w >= 900 ? 'span 2' : 'auto', size: i === 0 && s.w >= 900 ? 'clamp(40px,4.5vw,64px)' : '28px' })),
+      tCur: T[ti], tPos: (ti + 1) + ' / ' + T.length,
+      tPrev: () => this.setState({ t: (ti - 1 + T.length) % T.length }),
+      tNext: () => this.setState({ t: (ti + 1) % T.length }),
+      partners: ['Topend Civil', 'Harbour Health', 'NorthLink', 'Katherine Co-op', 'Arafura Group'],
+      faqs: [
+        ['Do I need any experience before booking?', 'No. Most courses are designed for beginners and refreshers alike. Any specific requirements are listed in the course details.'],
+        ['How do I book a course?', 'Choose your course, select Book Now and you\'ll be taken to the Allens Training booking system to pick a session and confirm your place.'],
+        ['Can you train our team at our workplace?', 'Yes. We offer onsite group training across the Territory. Send us an enquiry with your team size and location.'],
+        ['What should I bring on the day?', 'Comfortable clothing, photo ID and your booking confirmation. Everything else is provided.'],
+        ['Will I receive a certificate?', 'Learners who successfully complete a course receive a certificate of completion.']
+      ].map(([q, a], i) => ({ q, a, open: s.faq === i, sign: s.faq === i ? '−' : '+', onToggle: () => this.setState({ faq: s.faq === i ? null : i }) })),
+      qName: s.qName, qEmail: s.qEmail, qCourse: s.qCourse,
+      setQName: e => this.setState({ qName: e.target.value }), setQEmail: e => this.setState({ qEmail: e.target.value }), setQCourse: e => this.setState({ qCourse: e.target.value }),
+      quickSubmit: e => { e.preventDefault(); this.go('contact', { done: false, errors: {}, form: { ...s.form, name: s.qName, email: s.qEmail, course: s.qCourse } }); },
+      hasBookCourse: !!bc, noBookCourse: !bc, bookCourseTitle: bc ? bc.title : '', bookCourseBg: bc ? 'url(' + bc.src + ')' : 'none',
+      clearBookCourse: () => this.go('courses', { bookId: null }),
+      openExternal: () => this.setState({ external: true }),
+      showExternal: s.external, closeExternal: () => this.setState({ external: false }),
+      externalCourse: bc ? ' for “' + bc.title + '”' : '',
+      hasModalCourse: !!mc, modal: mc ? this.card(mc) : {},
+      modalFacts: [
+        { k: 'Duration', v: mc ? mc.dur : '' }, { k: 'Delivery', v: mc ? mc.mode : '' },
+        { k: 'Fees', v: 'Shown at booking' }, { k: 'Requirements', v: 'None' }
+      ],
+      closeModal: () => this.setState({ modalId: null }),
+      stop: e => e.stopPropagation(),
+      form: { name: field('name'), email: field('email'), phone: field('phone'), course: field('course'), message: field('message') },
+      courseOptions: this.courses.map(c => c.title),
+      hasErrors: Object.values(s.errors).some(Boolean),
+      sending: s.sending, submitLabel: s.sending ? 'Sending…' : 'Send enquiry →',
+      formDone: s.done, formOpen: !s.done,
+      firstName: s.form.name.trim().split(' ')[0],
+      submit: e => {
+        e.preventDefault();
+        const errs = this.validate(s.form);
+        if (Object.keys(errs).length) { this.setState({ errors: errs }); return; }
+        this.setState({ sending: true, errors: {} });
+        setTimeout(() => this.setState({ sending: false, done: true }), 900);
+      },
+      resetForm: () => this.setState({ done: false, form: { name: '', email: '', phone: '', course: '', message: '' } }),
+      contactRows, socials: ['Facebook', 'Instagram', 'LinkedIn']
+    };
+  }
+}
+</script>
+</body>
+</html>

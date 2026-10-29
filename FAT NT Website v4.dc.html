@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>FAT NT — On-location First Aid Training, NT &amp; WA Top End</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700;1,800;1,900&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+html,body{margin:0;padding:0;background:#F6F2EA;}
+*{box-sizing:border-box;}
+body{font-family:'Figtree',system-ui,sans-serif;color:#16201A;-webkit-font-smoothing:antialiased;}
+a{color:#0E3B24;text-underline-offset:3px;}
+a:hover{color:#C24A15;}
+button,input,select,textarea{font-family:inherit;}
+input,select,textarea{font-size:16px;}
+h1,h2,h3{text-wrap:balance;}
+p{text-wrap:pretty;}
+::selection{background:#E2581F;color:#FFFFFF;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div style="--accent: {{ accent }}; min-height:100vh; display:flex; flex-direction:column; background:#F6F2EA;">
+
+<sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#FFF4D6; color:#5A4410; font-size:13px; padding:8px clamp(16px,4vw,40px); display:flex; flex-wrap:wrap; gap:4px 16px; justify-content:space-between; border-bottom:1px solid #EAD9A6;">
+    <span><strong>Concept v0.4</strong> — real FAT NT content. Photos, travel dates &amp; review link are dummy placeholders — drag FAT NT photos onto any image to replace.</span>
+    <span>True Blue IT Services</span>
+  </div>
+</sc-if>
+
+<div style="background:#0E3B24; color:#D8E8DC; font-size:14px;">
+  <div style="max-width:1280px; margin:0 auto; padding:9px clamp(16px,4vw,40px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:6px 24px;">
+    <span><strong style="color:#FFFFFF;">Workplace &amp; group bookings only.</strong> We train organisations at their own location — we don't run public courses for individuals.</span>
+    <span style="display:flex; flex-wrap:wrap; gap:6px 20px;">
+      <a href="#" style="color:#FFFFFF; text-decoration:none; font-weight:600;">Login to Training Desk</a>
+      <button onClick="{{ goOnline }}" style="background:none; border:none; padding:0; color:#FFFFFF; font-size:14px; font-weight:600; cursor:pointer;">Free online courses</button>
+      <span style="font-weight:700; color:#FFFFFF;">0419 526 319</span>
+    </span>
+  </div>
+</div>
+
+<header style="position:sticky; top:0; z-index:40; background:#FFFFFF; border-bottom:1px solid #E2DACB;">
+  <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px); height:80px; display:flex; align-items:center; justify-content:space-between; gap:20px;">
+    <button onClick="{{ goHome }}" aria-label="FAT NT home" style="background:none; border:none; padding:0; cursor:pointer; display:flex; align-items:center; height:80px;">
+      <img src="./assets/fatnt-logo.png" alt="FAT NT — First Aid Training Northern Territory" style="height:76px; width:auto; display:block;">
+    </button>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <nav aria-label="Main" style="display:flex; align-items:center; gap:26px;">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="6">
+          <button onClick="{{ n.onClick }}" style="background:none; border:none; cursor:pointer; padding:28px 0 25px; font-size:15px; font-weight:{{ n.weight }}; color:#16201A; border-bottom:3px solid {{ n.bar }};" style-hover="color:#178A3E;">{{ n.label }}</button>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button onClick="{{ goEnquire }}" style="background:var(--accent,#C24A15); color:#FFFFFF; border:none; border-radius:4px; padding:0 20px; height:46px; font-size:15px; font-weight:700; cursor:pointer; white-space:nowrap;" style-hover="filter:brightness(1.08);">Book your team</button>
+      <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleMenu }}" aria-label="Menu" aria-expanded="{{ menuOpen }}" style="width:46px; height:46px; border:1.5px solid #0E3B24; border-radius:4px; background:#FFFFFF; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; cursor:pointer;">
+          <span style="display:block; width:18px; height:2px; background:#0E3B24;"></span>
+          <span style="display:block; width:18px; height:2px; background:#0E3B24;"></span>
+          <span style="display:block; width:18px; height:2px; background:#0E3B24;"></span>
+        </button>
+      </sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ showMobileMenu }}" hint-placeholder-val="{{ false }}">
+    <nav aria-label="Mobile" style="border-top:1px solid #E2DACB; padding:6px clamp(16px,4vw,40px) 20px; display:flex; flex-direction:column; animation:fadeUp .2s ease;">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="6">
+        <button onClick="{{ n.onClick }}" style="text-align:left; background:none; border:none; border-bottom:1px solid #EFE9DD; padding:15px 0; font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700; text-transform:uppercase; color:#0E3B24; cursor:pointer;">{{ n.label }}</button>
+      </sc-for>
+    </nav>
+  </sc-if>
+</header>
+
+<main style="flex:1;">
+
+<!-- ======================= HOME ======================= -->
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+
+  <section data-screen-label="Home — Hero" style="background:#FFFFFF; border-bottom:1px solid #E2DACB;">
+    <div style="max-width:1280px; margin:0 auto; padding:clamp(36px,5vw,72px) clamp(16px,4vw,40px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr)); gap:clamp(32px,4vw,64px); align-items:center;">
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        <p style="margin:0; font-size:15px; font-weight:700; color:#178A3E;">On-location first aid training · NT &amp; WA top end</p>
+        <h1 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(52px,7vw,96px); line-height:0.9; font-weight:800; text-transform:uppercase; color:#0E3B24; letter-spacing:-0.005em;">We come to you.<br>We train your <span style="color:var(--accent,#C24A15);">whole team.</span></h1>
+        <p style="margin:0; font-size:clamp(17px,1.5vw,20px); line-height:1.55; color:#3B4A40; max-width:560px;">Nationally recognised first aid courses delivered at your workplace — for schools, early learning centres, medical practices and care organisations from Darwin to Nhulunbuy, Alice Springs and Karratha.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:12px;">
+          <button onClick="{{ goSchedule }}" style="height:54px; padding:0 26px; background:var(--accent,#C24A15); color:#FFFFFF; border:none; border-radius:4px; font-size:17px; font-weight:700; cursor:pointer;" style-hover="filter:brightness(1.08);">See where we'll be →</button>
+          <button onClick="{{ goBooking }}" style="height:54px; padding:0 24px; background:#FFFFFF; color:#0E3B24; border:2px solid #0E3B24; border-radius:4px; font-size:17px; font-weight:700; cursor:pointer;" style-hover="background:#0E3B24; color:#FFFFFF;">How booking works</button>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px 28px; padding-top:20px; border-top:1px solid #E2DACB; font-size:15px; color:#3B4A40;">
+          <span><strong style="color:#0E3B24;">HLTAID009–013</strong> accredited courses</span>
+          <span><strong style="color:#0E3B24;">Senior trainer</strong> Candida Jones</span>
+          <span><strong style="color:#0E3B24;">Organisations only</strong> — no public classes</span>
+        </div>
+      </div>
+      <div style="position:relative; display:flex; flex-direction:column;">
+        <div style="position:relative; aspect-ratio:5/4; width:100%;">
+          <image-slot id="v4-hero" src="https://images.unsplash.com/photo-1755718669693-5e5e9ce53e17?auto=format&fit=crop&w=1400&q=70" credit="Unsplash — placeholder" credit-href="https://unsplash.com" shape="rounded" radius="6" placeholder="FAT NT photo: Candida training a client's staff at their workplace"></image-slot>
+        </div>
+        <div style="position:relative; margin:-56px 0 0 clamp(0px,4vw,40px); background:#0E3B24; color:#FFFFFF; border-radius:6px; padding:20px 22px; box-shadow:0 24px 48px -28px rgba(14,59,36,0.7); display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px;">
+            <span style="font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:24px; font-weight:800; text-transform:uppercase;">Next on the road</span>
+            <button onClick="{{ goSchedule }}" style="background:none; border:none; padding:0; color:#F7B58F; font-size:14px; font-weight:700; cursor:pointer;">All dates →</button>
+          </div>
+          <sc-for list="{{ nextTrips }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.onRequest }}" style="display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2px 16px; align-items:center; text-align:left; background:rgba(255,255,255,0.06); border:none; border-radius:4px; padding:10px 12px; color:#FFFFFF; cursor:pointer;" style-hover="background:rgba(255,255,255,0.14);">
+              <span style="font-size:17px; font-weight:700;">{{ t.town }}</span>
+              <span style="font-size:15px; font-weight:600; color:#F7B58F; text-align:right;">{{ t.dates }}</span>
+              <span style="font-size:13px; color:#B9D3C1;">{{ t.region }}</span>
+              <span style="font-size:13px; color:#B9D3C1; text-align:right;">{{ t.statusLabel }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — All at once" style="padding:clamp(64px,8vw,112px) 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px);">
+      <h2 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(44px,6.4vw,88px); line-height:0.92; font-weight:800; text-transform:uppercase; color:#0E3B24;">All your staff.<br>All at once.<br><span style="color:#178A3E;">All to the same standard.</span></h2>
+      <div style="margin-top:clamp(36px,5vw,56px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:32px;">
+        <sc-for list="{{ diffs }}" as="d" hint-placeholder-count="3">
+          <div style="border-top:3px solid #0E3B24; padding-top:18px; display:flex; flex-direction:column; gap:10px;">
+            <h3 style="margin:0; font-size:21px; font-weight:800; color:#0E3B24;">{{ d.title }}</h3>
+            <p style="margin:0; font-size:17px; line-height:1.6; color:#3B4A40;">{{ d.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top:clamp(40px,5vw,64px); background:#FFFFFF; border:1px solid #E2DACB; border-radius:6px; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));">
+        <div style="padding:24px 28px; border-right:1px solid #E2DACB;">
+          <p style="margin:0 0 8px; font-size:14px; font-weight:700; color:#8A8A80; text-transform:uppercase; letter-spacing:0.06em;">Sending staff elsewhere</p>
+          <p style="margin:0; font-size:17px; line-height:1.55; color:#5A645D;">A few staff at a time, in a classroom with strangers, working through generic scenarios — while the rest wait for the next course.</p>
+        </div>
+        <div style="padding:24px 28px; background:#EEF6F0;">
+          <p style="margin:0 0 8px; font-size:14px; font-weight:700; color:#178A3E; text-transform:uppercase; letter-spacing:0.06em;">With FAT NT</p>
+          <p style="margin:0; font-size:17px; line-height:1.55; color:#16201A;">Your whole team, trained together in your own workplace, on scenarios built from your environment and the incidents your staff have actually dealt with.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Candida" style="background:#0E3B24; color:#FFFFFF; overflow:hidden;">
+    <div style="max-width:1280px; margin:0 auto; padding:clamp(56px,7vw,104px) clamp(16px,4vw,40px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr)); gap:clamp(36px,5vw,80px); align-items:center;">
+      <div style="position:relative; aspect-ratio:4/5; width:100%; max-width:520px;">
+        <image-slot id="v4-candida" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1000&q=70" credit="Unsplash — placeholder" credit-href="https://unsplash.com" shape="rounded" radius="6" placeholder="Portrait: Candida Jones, Senior Trainer"></image-slot>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:22px;">
+        <p style="margin:0; font-size:15px; font-weight:700; color:#F7B58F;">Senior Trainer · Leading first aid trainer in the NT</p>
+        <h2 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(52px,7vw,96px); line-height:0.88; font-weight:800; text-transform:uppercase;">Candida Jones</h2>
+        <p style="margin:0; font-size:clamp(20px,1.9vw,24px); line-height:1.45; font-weight:500; color:#FFFFFF;">The trainer clients across the Territory ask for by name.</p>
+        <p style="margin:0; font-size:17px; line-height:1.65; color:#D8E8DC; max-width:560px;">Candida is FAT NT's senior trainer and the first choice for organisations right across the NT. Clients regularly request her personally — often rescheduling their training so Candida can deliver it. Her professionalism is matched only by her passion for empowering people to save lives.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:12px; padding-top:6px;">
+          <a href="https://www.google.com/search?q=FAT+NT+First+Aid+Training+Northern+Territory+reviews" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; height:52px; padding:0 22px; background:var(--accent,#C24A15); color:#FFFFFF; border-radius:4px; font-size:16px; font-weight:700; text-decoration:none;">Read Candida's Google reviews →</a>
+          <button onClick="{{ goEnquireCandida }}" style="height:52px; padding:0 22px; background:transparent; color:#FFFFFF; border:2px solid rgba(255,255,255,0.7); border-radius:4px; font-size:16px; font-weight:700; cursor:pointer;" style-hover="border-color:#FFFFFF;">Request Candida for your team</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — On the road" style="padding:clamp(64px,8vw,112px) 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px);">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:20px 48px; margin-bottom:32px;">
+        <div style="max-width:720px;">
+          <h2 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(44px,5.6vw,76px); line-height:0.92; font-weight:800; text-transform:uppercase; color:#0E3B24;">Coming to your town</h2>
+          <p style="margin:14px 0 0; font-size:18px; line-height:1.55; color:#3B4A40;">We travel through the NT and WA's top end at set times each year. Lock in your team while we're in your area.</p>
+        </div>
+        <button onClick="{{ goSchedule }}" style="height:50px; padding:0 22px; background:#0E3B24; color:#FFFFFF; border:none; border-radius:4px; font-size:16px; font-weight:700; cursor:pointer;">Full travel schedule →</button>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr)); gap:14px;">
+        <sc-for list="{{ homeTrips }}" as="t" hint-placeholder-count="6">
+          <article style="background:#FFFFFF; border:1px solid #E2DACB; border-radius:6px; padding:20px; display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+              <div>
+                <p style="margin:0; font-size:13px; font-weight:700; color:#178A3E;">{{ t.region }}</p>
+                <h3 style="margin:2px 0 0; font-family:'Barlow Condensed',sans-serif; font-size:34px; line-height:1; font-weight:800; text-transform:uppercase; color:#0E3B24;">{{ t.town }}</h3>
+              </div>
+              <span style="flex:none; font-size:12px; font-weight:700; padding:5px 9px; border-radius:99px; background:{{ t.chipBg }}; color:{{ t.chipFg }};">{{ t.statusLabel }}</span>
+            </div>
+            <p style="margin:0; font-size:20px; font-weight:700; color:#16201A;">{{ t.dates }}</p>
+            <button onClick="{{ t.onRequest }}" style="margin-top:auto; align-self:flex-start; background:none; border:none; padding:0 0 2px; border-bottom:2px solid #C24A15; color:#0E3B24; font-size:15px; font-weight:700; cursor:pointer;">{{ t.cta }} →</button>
+          </article>
+        </sc-for>
+      </div>
+      <p style="margin:20px 0 0; font-size:16px; color:#3B4A40;">Somewhere in between? <button onClick="{{ goEnquire }}" style="background:none; border:none; padding:0; font-size:16px; font-weight:700; color:#C24A15; cursor:pointer; text-decoration:underline; text-underline-offset:3px;">Ask us to add your community to a trip.</button></p>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Who we train" style="background:#FFFFFF; border-top:1px solid #E2DACB; border-bottom:1px solid #E2DACB; padding:clamp(64px,8vw,104px) 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:clamp(36px,5vw,72px);">
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <h2 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(44px,5.6vw,76px); line-height:0.92; font-weight:800; text-transform:uppercase; color:#0E3B24;">Who we train</h2>
+        <p style="margin:0; font-size:18px; line-height:1.6; color:#3B4A40;">FAT NT works exclusively with organisations. Your organisation books, confirms numbers, and we deliver at your location.</p>
+        <div role="note" style="margin-top:8px; border:2px solid #C24A15; border-radius:6px; padding:18px 20px; display:flex; flex-direction:column; gap:6px;">
+          <strong style="font-size:17px; color:#9C3A10;">We do not train individuals.</strong>
+          <span style="font-size:16px; line-height:1.55; color:#3B4A40;">FAT NT has no public training facility and doesn't run open classes. If you're looking for a course for yourself, please book with a public course provider.</span>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:28px;">
+        <div>
+          <p style="margin:0 0 12px; font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#178A3E;">Our core clients</p>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:10px;">
+            <sc-for list="{{ coreClients }}" as="c" hint-placeholder-count="4">
+              <div style="background:#0E3B24; color:#FFFFFF; border-radius:6px; padding:18px; display:flex; flex-direction:column; gap:4px; min-height:108px;">
+                <span style="font-family:'Barlow Condensed',sans-serif; font-size:26px; line-height:1; font-weight:800; text-transform:uppercase;">{{ c.t }}</span>
+                <span style="font-size:14px; line-height:1.45; color:#C9DECF;">{{ c.b }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div>
+          <p style="margin:0 0 12px; font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#178A3E;">We also train</p>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <sc-for list="{{ alsoClients }}" as="c" hint-placeholder-count="4">
+              <span style="border:1.5px solid #0E3B24; border-radius:99px; padding:9px 16px; font-size:15px; font-weight:600; color:#0E3B24;">{{ c }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Courses" style="padding:clamp(64px,8vw,104px) 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px);">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:20px 48px; margin-bottom:28px;">
+        <h2 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(44px,5.6vw,76px); line-height:0.92; font-weight:800; text-transform:uppercase; color:#0E3B24;">Nationally recognised courses</h2>
+        <button onClick="{{ goCourses }}" style="background:none; border:none; padding:0 0 2px; border-bottom:2px solid #0E3B24; color:#0E3B24; font-size:16px; font-weight:700; cursor:pointer;">Course details →</button>
+      </div>
+      <div style="border-top:2px solid #0E3B24;">
+        <sc-for list="{{ courseRows }}" as="c" hint-placeholder-count="5">
+          <button onClick="{{ c.onOpen }}" style="width:100%; background:none; border:none; border-bottom:1px solid #E2DACB; padding:18px 4px; display:grid; grid-template-columns:minmax(110px,150px) minmax(0,1fr) auto; gap:8px 24px; align-items:center; text-align:left; cursor:pointer; color:#16201A;" style-hover="background:#FFFFFF;">
+            <span style="font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:800; color:#178A3E;">{{ c.code }}</span>
+            <span style="font-size:clamp(17px,1.6vw,20px); font-weight:700;">{{ c.title }}</span>
+            <span style="font-size:20px; color:#C24A15;">→</span>
+          </button>
+        </sc-for>
+      </div>
+      <p style="margin:16px 0 0; font-size:14px; color:#5A645D;">Courses delivered and assessed on behalf of Allens Training Pty Ltd, RTO 90909.</p>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Feedback" style="background:#EEF6F0; padding:clamp(64px,8vw,104px) 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px);">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:clamp(32px,4vw,64px); align-items:start;">
+        <figure style="margin:0; display:flex; flex-direction:column; gap:20px;">
+          <p style="margin:0; font-size:15px; font-weight:700; color:#178A3E;">What learners tell us</p>
+          <blockquote style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(36px,4.4vw,60px); line-height:1; font-weight:700; color:#0E3B24;">“{{ featured.q }}”</blockquote>
+          <figcaption style="font-size:15px; color:#3B4A40;"><strong style="color:#16201A;">{{ featured.n }}</strong> · {{ featured.d }}</figcaption>
+          <a href="https://www.google.com/search?q=FAT+NT+First+Aid+Training+Northern+Territory+reviews" target="_blank" rel="noopener" style="align-self:flex-start; font-size:16px; font-weight:700; color:#0E3B24;">More reviews on Google →</a>
+        </figure>
+        <div style="columns:2 240px; column-gap:14px;">
+          <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="6">
+            <figure style="break-inside:avoid; margin:0 0 14px; background:#FFFFFF; border-radius:6px; padding:18px; display:flex; flex-direction:column; gap:10px;">
+              <span style="color:#E2581F; font-size:14px; letter-spacing:2px;">★★★★★</span>
+              <blockquote style="margin:0; font-size:16px; line-height:1.5; color:#16201A;">“{{ r.q }}”</blockquote>
+              <figcaption style="font-size:13px; color:#5A645D;"><strong style="color:#16201A;">{{ r.n }}</strong> · {{ r.d }}</figcaption>
+            </figure>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Booking steps" style="padding:clamp(64px,8vw,104px) 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px);">
+      <h2 style="margin:0 0 32px; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(44px,5.6vw,76px); line-height:0.92; font-weight:800; text-transform:uppercase; color:#0E3B24;">How booking works</h2>
+      <ol style="list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr)); gap:14px;">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+          <li style="background:#FFFFFF; border:1px solid #E2DACB; border-radius:6px; padding:22px; display:flex; flex-direction:column; gap:10px;">
+            <span style="font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:44px; line-height:0.9; font-weight:800; color:#E2581F;">{{ s.n }}</span>
+            <h3 style="margin:0; font-size:19px; font-weight:800; color:#0E3B24;">{{ s.t }}</h3>
+            <p style="margin:0; font-size:15px; line-height:1.55; color:#3B4A40;">{{ s.b }}</p>
+          </li>
+        </sc-for>
+      </ol>
+      <div style="margin-top:20px; display:flex; flex-wrap:wrap; gap:12px;">
+        <button onClick="{{ goBooking }}" style="height:50px; padding:0 22px; background:#0E3B24; color:#FFFFFF; border:none; border-radius:4px; font-size:16px; font-weight:700; cursor:pointer;">Payment &amp; booking details</button>
+        <button onClick="{{ goEnquire }}" style="height:50px; padding:0 22px; background:var(--accent,#C24A15); color:#FFFFFF; border:none; border-radius:4px; font-size:16px; font-weight:700; cursor:pointer;">Start an enquiry →</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — Field" style="padding:0 0 clamp(64px,8vw,104px);">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:14px;">
+      <div style="position:relative; aspect-ratio:4/3;"><image-slot id="v4-vehicle" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=70" credit="Unsplash — placeholder" credit-href="https://unsplash.com" shape="rounded" radius="6" placeholder="FAT NT photo: training vehicle on a remote road"></image-slot></div>
+      <div style="position:relative; aspect-ratio:4/3;"><image-slot id="v4-kit" src="https://images.unsplash.com/photo-1755549746563-a7c0a391af36?auto=format&fit=crop&w=900&q=70" credit="Unsplash — placeholder" credit-href="https://unsplash.com" shape="rounded" radius="6" placeholder="FAT NT photo: training equipment set up onsite"></image-slot></div>
+      <div style="position:relative; aspect-ratio:4/3;"><image-slot id="v4-group" src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=900&q=70" credit="Unsplash — placeholder" credit-href="https://unsplash.com" shape="rounded" radius="6" placeholder="FAT NT photo: whole-team session at a client workplace"></image-slot></div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home — CTA" style="background:#C24A15; color:#FFFFFF;">
+    <div style="max-width:1280px; margin:0 auto; padding:clamp(56px,7vw,96px) clamp(16px,4vw,40px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:28px;">
+      <div style="max-width:760px;">
+        <h2 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(48px,6.4vw,92px); line-height:0.9; font-weight:800; text-transform:uppercase;">Plan your team's training around our next visit.</h2>
+        <p style="margin:16px 0 0; font-size:18px; line-height:1.55;">Call <strong>0419 526 319</strong> or email <strong>admin@fatnt.com</strong></p>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:12px;">
+        <button onClick="{{ goSchedule }}" style="height:56px; padding:0 24px; background:#FFFFFF; color:#0E3B24; border:none; border-radius:4px; font-size:17px; font-weight:700; cursor:pointer;">Travel dates</button>
+        <button onClick="{{ goEnquire }}" style="height:56px; padding:0 24px; background:#0E3B24; color:#FFFFFF; border:none; border-radius:4px; font-size:17px; font-weight:700; cursor:pointer;">Submit an enquiry →</button>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ======================= SCHEDULE ======================= -->
+<sc-if value="{{ isSchedule }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Schedule — Header" style="background:#0E3B24; color:#FFFFFF;">
+    <div style="max-width:1280px; margin:0 auto; padding:clamp(44px,6vw,80px) clamp(16px,4vw,40px) clamp(32px,4vw,48px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px;">
+      <div>
+        <p style="margin:0 0 12px; font-size:15px; font-weight:700; color:#F7B58F;">Travel schedule 2026–27</p>
+        <h1 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(56px,8vw,112px); line-height:0.88; font-weight:800; text-transform:uppercase;">Where we'll be</h1>
+      </div>
+      <p style="margin:0; flex:0 1 460px; font-size:17px; line-height:1.6; color:#D8E8DC;">We travel to regional and remote locations across the Northern Territory and WA's top end at set times each year. Request a date while we're in your area — we'll deliver at your workplace. Darwin bookings are available year-round.</p>
+    </div>
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px) 20px; display:flex; flex-wrap:wrap; gap:8px;" role="group" aria-label="Filter by region">
+      <sc-for list="{{ regionFilters }}" as="r" hint-placeholder-count="6">
+        <button onClick="{{ r.onClick }}" aria-pressed="{{ r.active }}" style="height:42px; padding:0 16px; border-radius:99px; border:1.5px solid {{ r.border }}; background:{{ r.bg }}; color:{{ r.fg }}; font-size:15px; font-weight:600; cursor:pointer;">{{ r.label }}</button>
+      </sc-for>
+    </div>
+  </section>
+  <section style="padding:clamp(32px,4vw,56px) 0 clamp(64px,8vw,104px);">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px); display:flex; flex-wrap:wrap; gap:clamp(28px,4vw,56px); align-items:flex-start;">
+      <div style="flex:2 1 600px; min-width:0; display:flex; flex-direction:column; gap:36px;">
+        <div style="background:#FFFFFF; border:1px solid #E2DACB; border-left:0; border-radius:6px; display:flex; flex-wrap:wrap; align-items:center; gap:12px 24px; padding:18px 20px; overflow:hidden; position:relative;">
+          <span style="position:absolute; left:0; top:0; bottom:0; width:6px; background:#178A3E;"></span>
+          <div style="flex:1 1 260px; padding-left:6px;">
+            <p style="margin:0; font-size:13px; font-weight:700; color:#178A3E;">Home base</p>
+            <p style="margin:2px 0 0; font-family:'Barlow Condensed',sans-serif; font-size:30px; line-height:1; font-weight:800; text-transform:uppercase; color:#0E3B24;">Darwin, Palmerston &amp; rural area</p>
+          </div>
+          <span style="font-size:17px; font-weight:700;">Year-round</span>
+          <button onClick="{{ requestDarwin }}" style="height:46px; padding:0 18px; background:var(--accent,#C24A15); color:#FFFFFF; border:none; border-radius:4px; font-size:15px; font-weight:700; cursor:pointer;">Request a date →</button>
+        </div>
+        <sc-for list="{{ months }}" as="m" hint-placeholder-count="3">
+          <div>
+            <h2 style="margin:0 0 10px; font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:800; text-transform:uppercase; color:#0E3B24; border-bottom:2px solid #0E3B24; padding-bottom:6px;">{{ m.label }}</h2>
+            <sc-for list="{{ m.trips }}" as="t" hint-placeholder-count="2">
+              <div style="display:grid; grid-template-columns:minmax(120px,170px) minmax(0,1fr) auto; gap:8px 20px; align-items:center; padding:16px 0; border-bottom:1px solid #E2DACB;">
+                <span style="font-size:18px; font-weight:800; color:#16201A;">{{ t.dates }}</span>
+                <div style="min-width:0;">
+                  <p style="margin:0; font-family:'Barlow Condensed',sans-serif; font-size:28px; line-height:1; font-weight:800; text-transform:uppercase; color:#0E3B24;">{{ t.town }}</p>
+                  <p style="margin:4px 0 0; font-size:14px; color:#5A645D;">{{ t.region }} · <span style="font-weight:700; color:{{ t.chipFg }};">{{ t.statusLabel }}</span></p>
+                </div>
+                <button onClick="{{ t.onRequest }}" style="height:44px; padding:0 16px; background:{{ t.btnBg }}; color:{{ t.btnFg }}; border:1.5px solid #0E3B24; border-radius:4px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap;">{{ t.cta }}</button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noTrips }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:0; font-size:17px; color:#3B4A40;">No scheduled visits in this region yet — send an enquiry and we'll look at adding one.</p>
+        </sc-if>
+      </div>
+      <aside style="flex:1 1 300px; display:flex; flex-direction:column; gap:14px; position:sticky; top:100px;">
+        <div style="background:#FFFFFF; border:1px solid #E2DACB; border-radius:6px; padding:22px; display:flex; flex-direction:column; gap:10px;">
+          <h2 style="margin:0; font-size:20px; font-weight:800; color:#0E3B24;">Not on the list?</h2>
+          <p style="margin:0; font-size:15px; line-height:1.6; color:#3B4A40;">We train everywhere in between — communities, stations, mine sites and remote workplaces. Tell us where you are and how many staff need training, and we'll fit you into a trip.</p>
+          <button onClick="{{ goEnquire }}" style="align-self:flex-start; height:46px; padding:0 18px; background:#0E3B24; color:#FFFFFF; border:none; border-radius:4px; font-size:15px; font-weight:700; cursor:pointer;">Suggest a location →</button>
+        </div>
+        <div style="background:#EEF6F0; border-radius:6px; padding:22px; display:flex; flex-direction:column; gap:8px;">
+          <h2 style="margin:0; font-size:17px; font-weight:800; color:#0E3B24;">Booking while we're in town</h2>
+          <ul style="margin:0; padding-left:18px; font-size:15px; line-height:1.7; color:#3B4A40;">
+            <li>Organisations only — no individual bookings</li>
+            <li>Booking confirmed once student numbers are set</li>
+            <li>50% deposit to secure your date</li>
+          </ul>
+        </div>
+        <a href="#" style="font-size:15px; font-weight:700;">Open the live Booking Calendar →</a>
+      </aside>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ======================= COURSES ======================= -->
+<sc-if value="{{ isCourses }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Courses — Header" style="background:#FFFFFF; border-bottom:1px solid #E2DACB;">
+    <div style="max-width:1280px; margin:0 auto; padding:clamp(44px,6vw,80px) clamp(16px,4vw,40px) clamp(32px,4vw,48px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px;">
+      <div>
+        <p style="margin:0 0 12px; font-size:15px; font-weight:700; color:#178A3E;">Delivered at your workplace</p>
+        <h1 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(56px,8vw,112px); line-height:0.88; font-weight:800; text-transform:uppercase; color:#0E3B24;">Courses</h1>
+      </div>
+      <p style="margin:0; flex:0 1 460px; font-size:17px; line-height:1.6; color:#3B4A40;">Every course covers the required core units, tailored to your workplace and built on your staff's own experience of first aid incidents. Courses are delivered and assessed on behalf of Allens Training Pty Ltd, RTO 90909.</p>
+    </div>
+  </section>
+  <section style="padding:clamp(36px,5vw,64px) 0 clamp(64px,8vw,104px);">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px);">
+      <h2 style="margin:0 0 16px; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#178A3E;">Nationally recognised courses</h2>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <sc-for list="{{ courseRows }}" as="c" hint-placeholder-count="5">
+          <article style="background:#FFFFFF; border:1px solid {{ c.border }}; border-radius:6px; overflow:hidden;">
+            <button onClick="{{ c.onOpen }}" aria-expanded="{{ c.open }}" style="width:100%; background:none; border:none; padding:20px 22px; display:grid; grid-template-columns:minmax(110px,150px) minmax(0,1fr) auto; gap:6px 24px; align-items:center; text-align:left; cursor:pointer; color:#16201A;">
+              <span style="font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:800; color:#178A3E;">{{ c.code }}</span>
+              <span style="display:flex; flex-direction:column; gap:3px;"><span style="font-size:clamp(18px,1.7vw,21px); font-weight:800;">{{ c.title }}</span><span style="font-size:14px; color:#5A645D;">Suits: {{ c.suits }}</span></span>
+              <span style="font-size:14px; font-weight:700; color:#C24A15; white-space:nowrap;">{{ c.toggle }}</span>
+            </button>
+            <sc-if value="{{ c.open }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 22px 22px; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); gap:20px; animation:fadeUp .2s ease;">
+                <p style="margin:0; font-size:16px; line-height:1.6; color:#3B4A40;">{{ c.desc }}</p>
+                <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+                  <p style="margin:0; font-size:14px; line-height:1.5; color:#5A645D;">Duration, pre-course learning and pricing are confirmed with your booking.</p>
+                  <button onClick="{{ c.onEnquire }}" style="height:46px; padding:0 18px; background:var(--accent,#C24A15); color:#FFFFFF; border:none; border-radius:4px; font-size:15px; font-weight:700; cursor:pointer;">Enquire for your team →</button>
+                </div>
+              </div>
+            </sc-if>
+          </article>
+        </sc-for>
+      </div>
+
+      <div id="online" style="margin-top:clamp(48px,6vw,80px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:16px 40px; margin-bottom:16px;">
+        <div>
+          <h2 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(40px,5vw,64px); line-height:0.92; font-weight:800; text-transform:uppercase; color:#0E3B24;">Online course library</h2>
+          <p style="margin:10px 0 0; font-size:17px; color:#3B4A40;">Free short courses anyone can complete online.</p>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:12px;">
+        <sc-for list="{{ online }}" as="o" hint-placeholder-count="3">
+          <article style="background:#EEF6F0; border-radius:6px; padding:22px; display:flex; flex-direction:column; gap:12px;">
+            <span style="align-self:flex-start; background:#178A3E; color:#FFFFFF; font-size:12px; font-weight:800; letter-spacing:0.08em; padding:4px 9px; border-radius:3px;">FREE</span>
+            <h3 style="margin:0; font-size:19px; line-height:1.3; font-weight:800; color:#0E3B24; flex:1;">{{ o.t }}</h3>
+            <span style="font-size:13px; color:#5A645D;">{{ o.tag }}</span>
+            <a href="#" style="font-size:15px; font-weight:700;">More info →</a>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ======================= TEAM ======================= -->
+<sc-if value="{{ isTeam }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Team — Candida" style="background:#0E3B24; color:#FFFFFF;">
+    <div style="max-width:1280px; margin:0 auto; padding:clamp(44px,6vw,88px) clamp(16px,4vw,40px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:clamp(36px,5vw,80px); align-items:center;">
+      <div style="display:flex; flex-direction:column; gap:22px;">
+        <p style="margin:0; font-size:15px; font-weight:700; color:#F7B58F;">Our trainers</p>
+        <h1 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(56px,8vw,112px); line-height:0.86; font-weight:800; text-transform:uppercase;">Candida Jones<br><span style="color:#F7B58F;">Senior Trainer</span></h1>
+        <p style="margin:0; font-size:clamp(19px,1.8vw,23px); line-height:1.45; font-weight:500;">The principal choice of clients across the Territory.</p>
+        <p style="margin:0; font-size:17px; line-height:1.65; color:#D8E8DC;">Candida is requested by name more than any other trainer we know — so much so that clients regularly rebook their training so she can deliver it. Schools, early learning centres, medical teams and care organisations value her clear, practical teaching and the way she draws on each team's own experiences.</p>
+        <p style="margin:0; font-size:17px; line-height:1.65; color:#D8E8DC;">Her professionalism is outweighed only by her passionate commitment to empowering others to save lives.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:12px;">
+          <a href="https://www.google.com/search?q=FAT+NT+First+Aid+Training+Northern+Territory+reviews" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; height:52px; padding:0 22px; background:var(--accent,#C24A15); color:#FFFFFF; border-radius:4px; font-size:16px; font-weight:700; text-decoration:none;">Candida's Google reviews →</a>
+          <button onClick="{{ goEnquireCandida }}" style="height:52px; padding:0 22px; background:transparent; color:#FFFFFF; border:2px solid rgba(255,255,255,0.7); border-radius:4px; font-size:16px; font-weight:700; cursor:pointer;">Request Candida</button>
+        </div>
+      </div>
+      <div style="position:relative; aspect-ratio:4/5; width:100%; max-width:540px; justify-self:end;">
+        <image-slot id="v4-candida-team" src="https://images.unsplash.com/photo-1755548376576-e045f6e01773?auto=format&fit=crop&w=1000&q=70" credit="Unsplash — placeholder" credit-href="https://unsplash.com" shape="rounded" radius="6" placeholder="Portrait: Candida Jones delivering training"></image-slot>
+      </div>
+    </div>
+  </section>
+  <section data-screen-label="Team — Director" style="padding:clamp(64px,8vw,104px) 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr)); gap:clamp(32px,5vw,72px); align-items:center;">
+      <div style="position:relative; aspect-ratio:1/1; width:100%; max-width:440px;">
+        <image-slot id="v4-michael" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=70" credit="Unsplash — placeholder" credit-href="https://unsplash.com" shape="rounded" radius="6" placeholder="Portrait: Michael Pyper, Director"></image-slot>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <p style="margin:0; font-size:15px; font-weight:700; color:#178A3E;">Director</p>
+        <h2 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(44px,5.6vw,76px); line-height:0.92; font-weight:800; text-transform:uppercase; color:#0E3B24;">Michael Pyper</h2>
+        <p style="margin:0; font-size:17px; line-height:1.7; color:#3B4A40;">Born in Alice Springs and having served in the Navy for over 22 years, Michael brings strong leadership, service values and a practical approach to training.</p>
+        <p style="margin:0; font-size:17px; line-height:1.7; color:#3B4A40;">He is passionate about helping people gain life-saving skills, and believes every learner should be treated with dignity, respect and cultural understanding.</p>
+      </div>
+    </div>
+  </section>
+  <section data-screen-label="Team — Approach" style="background:#FFFFFF; border-top:1px solid #E2DACB; padding:clamp(56px,7vw,96px) 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px);">
+      <h2 style="margin:0 0 28px; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(40px,5vw,64px); line-height:0.92; font-weight:800; text-transform:uppercase; color:#0E3B24;">How we train</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:28px;">
+        <sc-for list="{{ approach }}" as="a" hint-placeholder-count="4">
+          <div style="border-top:3px solid #178A3E; padding-top:16px; display:flex; flex-direction:column; gap:8px;">
+            <h3 style="margin:0; font-size:19px; font-weight:800; color:#0E3B24;">{{ a.t }}</h3>
+            <p style="margin:0; font-size:16px; line-height:1.6; color:#3B4A40;">{{ a.b }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ======================= BOOKING ======================= -->
+<sc-if value="{{ isBooking }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Booking — Header" style="background:#FFFFFF; border-bottom:1px solid #E2DACB;">
+    <div style="max-width:1280px; margin:0 auto; padding:clamp(44px,6vw,80px) clamp(16px,4vw,40px) clamp(32px,4vw,48px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px;">
+      <div>
+        <p style="margin:0 0 12px; font-size:15px; font-weight:700; color:#178A3E;">For organisations</p>
+        <h1 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(56px,8vw,112px); line-height:0.88; font-weight:800; text-transform:uppercase; color:#0E3B24;">How booking works</h1>
+      </div>
+      <p style="margin:0; flex:0 1 460px; font-size:17px; line-height:1.6; color:#3B4A40;">Your organisation books training for its staff. Once student numbers are confirmed we lock in the date and our trainer comes to your workplace.</p>
+    </div>
+  </section>
+  <section style="padding:clamp(36px,5vw,64px) 0 clamp(64px,8vw,104px);">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px); display:flex; flex-wrap:wrap; gap:clamp(28px,4vw,56px); align-items:flex-start;">
+      <ol style="flex:2 1 560px; list-style:none; margin:0; padding:0;">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+          <li style="display:grid; grid-template-columns:72px minmax(0,1fr); gap:20px; padding:24px 0; border-top:2px solid #0E3B24;">
+            <span style="font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:56px; line-height:0.85; font-weight:800; color:#E2581F;">{{ s.n }}</span>
+            <div>
+              <h2 style="margin:0; font-size:22px; font-weight:800; color:#0E3B24;">{{ s.t }}</h2>
+              <p style="margin:6px 0 0; font-size:17px; line-height:1.6; color:#3B4A40;">{{ s.b }}</p>
+            </div>
+          </li>
+        </sc-for>
+      </ol>
+      <aside style="flex:1 1 320px; display:flex; flex-direction:column; gap:14px; position:sticky; top:100px;">
+        <div style="background:#0E3B24; color:#FFFFFF; border-radius:6px; padding:24px; display:flex; flex-direction:column; gap:14px;">
+          <h2 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:800; text-transform:uppercase;">Payment terms</h2>
+          <div style="display:flex; justify-content:space-between; gap:12px; padding:12px 0; border-top:1px solid rgba(255,255,255,0.2);"><span style="color:#D8E8DC;">On booking</span><strong style="font-size:20px;">50% deposit</strong></div>
+          <div style="display:flex; justify-content:space-between; gap:12px; padding:12px 0; border-top:1px solid rgba(255,255,255,0.2);"><span style="color:#D8E8DC;">Balance</span><strong style="font-size:20px; text-align:right;">{{ balanceTerm }}</strong></div>
+          <button onClick="{{ goEnquire }}" style="height:50px; background:var(--accent,#C24A15); color:#FFFFFF; border:none; border-radius:4px; font-size:16px; font-weight:700; cursor:pointer;">Submit an enquiry →</button>
+          <a href="#" style="color:#FFFFFF; font-size:15px; font-weight:600;">Already booked? Login to Training Desk →</a>
+        </div>
+        <div role="note" style="border:2px solid #C24A15; border-radius:6px; padding:18px 20px; background:#FFFFFF;">
+          <strong style="display:block; font-size:16px; color:#9C3A10;">Organisations only</strong>
+          <span style="font-size:15px; line-height:1.55; color:#3B4A40;">We don't take individual bookings and have no public training venue. Training is always held at the client's location.</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ======================= ENQUIRE ======================= -->
+<sc-if value="{{ isEnquire }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Enquire — Header" style="background:#FFFFFF; border-bottom:1px solid #E2DACB;">
+    <div style="max-width:1280px; margin:0 auto; padding:clamp(44px,6vw,80px) clamp(16px,4vw,40px) clamp(32px,4vw,48px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px 48px;">
+      <div>
+        <p style="margin:0 0 12px; font-size:15px; font-weight:700; color:#178A3E;">Organisation bookings</p>
+        <h1 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(56px,8vw,112px); line-height:0.88; font-weight:800; text-transform:uppercase; color:#0E3B24;">Book your team</h1>
+      </div>
+      <p style="margin:0; flex:0 1 460px; font-size:17px; line-height:1.6; color:#3B4A40;">Tell us about your organisation, where you are and roughly how many staff need training. We'll come back to you with dates and a quote.</p>
+    </div>
+  </section>
+  <section style="padding:clamp(36px,5vw,64px) 0 clamp(64px,8vw,104px);">
+    <div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,40px); display:flex; flex-wrap:wrap; gap:clamp(32px,5vw,72px); align-items:flex-start;">
+      <div style="flex:1.6 1 520px; min-width:0;">
+        <sc-if value="{{ formDone }}" hint-placeholder-val="{{ false }}">
+          <div role="status" style="background:#FFFFFF; border:1px solid #E2DACB; border-radius:6px; padding:clamp(24px,4vw,44px); display:flex; flex-direction:column; gap:14px; animation:fadeUp .3s ease;">
+            <h2 style="margin:0; font-family:'Barlow Condensed',sans-serif; font-style:italic; font-size:clamp(40px,5vw,60px); line-height:0.92; font-weight:800; text-transform:uppercase; color:#0E3B24;">Thanks, {{ firstName }}.</h2>
+            <p style="margin:0; font-size:17px; line-height:1.6; color:#3B4A40;">We've received the enquiry for <strong>{{ form.org.value }}</strong> and will reply to <strong>{{ form.email.value }}</strong> shortly.</p>
+            <p style="margin:0; font-size:13px; color:#5A645D;">Prototype — no message was sent.</p>
+            <button onClick="{{ resetForm }}" style="align-self:flex-start; height:46px; padding:0 18px; background:#FFFFFF; border:1.5px solid #0E3B24; border-radius:4px; color:#0E3B24; font-size:15px; font-weight:700; cursor:pointer;">New enquiry</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ submit }}" novalidate="novalidate" style="background:#FFFFFF; border:1px solid #E2DACB; border-radius:6px; padding:clamp(22px,4vw,40px); display:flex; flex-direction:column; gap:20px;">
+            <sc-if value="{{ hasErrors }}" hint-placeholder-val="{{ false }}">
+              <div role="alert" style="background:#FCECE6; color:#8E2D0C; border-radius:4px; padding:12px 14px; font-size:15px;">Please check the highlighted fields.</div>
+            </sc-if>
+            <sc-if value="{{ hasPrefill }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#EEF6F0; border-radius:4px; padding:12px 14px; font-size:15px; color:#0E3B24;"><strong>Requested:</strong> {{ prefillLabel }}</div>
+            </sc-if>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr)); gap:18px;">
+              <sc-for list="{{ fields }}" as="f" hint-placeholder-count="6">
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  <label for="{{ f.id }}" style="font-size:14px; font-weight:700;">{{ f.label }}</label>
+                  <input id="{{ f.id }}" type="{{ f.type }}" value="{{ f.value }}" onChange="{{ f.onChange }}" aria-invalid="{{ f.hasError }}" style="height:50px; padding:0 14px; border:1.5px solid {{ f.border }}; border-radius:4px; background:#FBFAF6; color:#16201A; outline:none;" style-focus="border-color:#178A3E; background:#FFFFFF;">
+                  <span style="font-size:13px; color:#B4321F; min-height:16px;">{{ f.error }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr)); gap:18px;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label for="f-type" style="font-size:14px; font-weight:700;">Organisation type</label>
+                <select id="f-type" value="{{ orgType }}" onChange="{{ setOrgType }}" style="height:50px; padding:0 12px; border:1.5px solid #E2DACB; border-radius:4px; background:#FBFAF6; color:#16201A;">
+                  <sc-for list="{{ orgTypes }}" as="o" hint-placeholder-count="8"><option value="{{ o }}">{{ o }}</option></sc-for>
+                </select>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label for="f-trip" style="font-size:14px; font-weight:700;">Preferred visit</label>
+                <select id="f-trip" value="{{ tripSel }}" onChange="{{ setTrip }}" style="height:50px; padding:0 12px; border:1.5px solid #E2DACB; border-radius:4px; background:#FBFAF6; color:#16201A;">
+                  <sc-for list="{{ tripOptions }}" as="o" hint-placeholder-count="8"><option value="{{ o }}">{{ o }}</option></sc-for>
+                </select>
+              </div>
+            </div>
+            <fieldset style="border:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+              <legend style="font-size:14px; font-weight:700; margin-bottom:10px;">Courses of interest</legend>
+              <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                <sc-for list="{{ courseChips }}" as="c" hint-placeholder-count="5">
+                  <button type="button" onClick="{{ c.onClick }}" aria-pressed="{{ c.on }}" style="height:40px; padding:0 14px; border-radius:99px; border:1.5px solid {{ c.border }}; background:{{ c.bg }}; color:{{ c.fg }}; font-size:14px; font-weight:700; cursor:pointer;">{{ c.code }}</button>
+                </sc-for>
+              </div>
+            </fieldset>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <label for="f-msg" style="font-size:14px; font-weight:700;">Anything we should know? <span style="font-weight:400; color:#5A645D;">(optional)</span></label>
+              <textarea id="f-msg" rows="4" value="{{ msg }}" onChange="{{ setMsg }}" style="padding:12px 14px; border:1.5px solid #E2DACB; border-radius:4px; background:#FBFAF6; color:#16201A; resize:vertical; line-height:1.5;" placeholder="e.g. shift times, site access, specific hazards"></textarea>
+            </div>
+            <label style="display:flex; gap:12px; align-items:flex-start; font-size:15px; line-height:1.5; cursor:pointer; padding:14px; border-radius:4px; border:1.5px solid {{ orgConfirmBorder }}; background:#FBFAF6;">
+              <input type="checkbox" checked="{{ orgConfirm }}" onChange="{{ toggleOrgConfirm }}" style="width:20px; height:20px; margin:2px 0 0; accent-color:#178A3E; flex:none;">
+              <span>I'm booking on behalf of an organisation, and training will be held at our location. <span style="color:#5A645D;">(FAT NT does not train individuals.)</span></span>
+            </label>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px;">
+              <button type="submit" disabled="{{ sending }}" style="height:54px; padding:0 26px; min-width:200px; background:var(--accent,#C24A15); color:#FFFFFF; border:none; border-radius:4px; font-size:17px; font-weight:700; cursor:pointer;">{{ submitLabel }}</button>
+              <span style="font-size:13px; color:#5A645D;">* Required</span>
+            </div>
+          </form>
+        </sc-if>
+      </div>
+      <aside style="flex:1 1 300px; display:flex; flex-direction:column; gap:0;">
+        <sc-for list="{{ contactRows }}" as="r" hint-placeholder-count="3">
+          <div style="border-top:2px solid #0E3B24; padding:14px 0 20px;">
+            <p style="margin:0; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#5A645D;">{{ r.label }}</p>
+            <p style="margin:4px 0 0; font-size:21px; line-height:1.35; font-weight:700; color:#0E3B24; white-space:pre-line;">{{ r.value }}</p>
+          </div>
+        </sc-for>
+        <div style="border-top:2px solid #0E3B24; padding-top:14px; display:flex; flex-direction:column; gap:8px;">
+          <a href="#" style="font-size:15px; font-weight:700;">Booking Calendar →</a>
+          <a href="#" style="font-size:15px; font-weight:700;">Login to Training Desk →</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</sc-if>
+
+</main>
+
+<footer style="background:#FFFFFF; border-top:4px solid #178A3E;">
+  <div style="max-width:1280px; margin:0 auto; padding:clamp(40px,5vw,64px) clamp(16px,4vw,40px) 28px; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr)); gap:32px;">
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <img src="./assets/fatnt-logo.png" alt="FAT NT — First Aid Training Northern Territory" style="width:220px; height:auto; margin:-20px 0 -16px 0;">
+      <p style="margin:0; font-size:15px; line-height:1.55; color:#3B4A40; max-width:280px;">On-location first aid training for organisations across Darwin, regional and remote NT, and WA's top end.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <p style="margin:0 0 4px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#178A3E;">Explore</p>
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="6">
+        <button onClick="{{ n.onClick }}" style="background:none; border:none; padding:2px 0; text-align:left; font-size:15px; color:#16201A; cursor:pointer;" style-hover="color:#C24A15;">{{ n.label }}</button>
+      </sc-for>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; font-size:15px; line-height:1.5; color:#16201A;">
+      <p style="margin:0 0 4px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#178A3E;">Where we are</p>
+      <span>2/The Clock Tower, Dickward Drive<br>Coconut Grove NT 0810</span>
+      <span style="font-weight:700;">0419 526 319</span>
+      <a href="mailto:admin@fatnt.com">admin@fatnt.com</a>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; font-size:15px;">
+      <p style="margin:0 0 4px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#178A3E;">Resources</p>
+      <a href="#">Login to Training Desk</a>
+      <a href="#">Booking Calendar</a>
+      <a href="#">Student Handbook</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+  </div>
+  <div style="background:#0E3B24; color:#B9D3C1; font-size:13px;">
+    <div style="max-width:1280px; margin:0 auto; padding:14px clamp(16px,4vw,40px) {{ footerPad }}; display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 24px;">
+      <span>Courses delivered and assessed on behalf of Allens Training Pty Ltd, RTO 90909.</span>
+      <span>© 2026 FAT NT – First Aid Training Northern Territory</span>
+    </div>
+  </div>
+</footer>
+
+<sc-if value="{{ showMobileBar }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed; left:0; right:0; bottom:0; z-index:35; background:#FFFFFF; border-top:1px solid #E2DACB; padding:10px 14px calc(10px + env(safe-area-inset-bottom)); display:flex; gap:8px;">
+    <button onClick="{{ goSchedule }}" style="flex:1; height:50px; background:#FFFFFF; color:#0E3B24; border:1.5px solid #0E3B24; border-radius:4px; font-size:16px; font-weight:700; cursor:pointer;">Travel dates</button>
+    <button onClick="{{ goEnquire }}" style="flex:1.3; height:50px; background:var(--accent,#C24A15); color:#FFFFFF; border:none; border-radius:4px; font-size:16px; font-weight:700; cursor:pointer;">Book your team</button>
+  </div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#C24A15&quot;,&quot;options&quot;:[&quot;#C24A15&quot;,&quot;#E2581F&quot;,&quot;#178A3E&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Brand&quot;},&quot;balanceTerm&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;31 working days before the course&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;showNotes&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Review&quot;},&quot;startPage&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;home&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;schedule&quot;,&quot;courses&quot;,&quot;team&quot;,&quot;booking&quot;,&quot;enquire&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Review&quot;}}">
+class Component extends DCLogic {
+  state = {
+    page: this.props.startPage ?? 'home',
+    w: typeof window !== 'undefined' ? window.innerWidth : 1280,
+    menuOpen: false, region: 'All', openCourse: null,
+    f: { org: '', name: '', email: '', phone: '', town: '', staff: '' },
+    errors: {}, orgType: 'School', trip: 'Flexible — suggest a date', chips: [], msg: '', orgConfirm: false,
+    sending: false, done: false, prefill: ''
+  };
+
+  courses = [
+    { code: 'HLTAID009', title: 'Provide cardiopulmonary resuscitation', suits: 'all staff needing a CPR refresher', desc: 'Recognise an emergency, perform CPR on adults, children and infants, and use an AED — practised on scenarios from your own workplace.' },
+    { code: 'HLTAID010', title: 'Provide basic emergency life support', suits: 'staff who need CPR plus core emergency skills', desc: 'CPR and AED use, plus managing bleeding, choking, shock and an unconscious casualty until help arrives.' },
+    { code: 'HLTAID011', title: 'Provide First Aid', suits: 'most workplaces, medical and care teams', desc: 'The core workplace first aid course, covering a wide range of injuries and illnesses — tailored to the incidents your team is most likely to face.' },
+    { code: 'HLTAID012', title: 'Provide First Aid in an education and care setting', suits: 'schools, early learning and daycare', desc: 'First aid for educators and carers, including asthma and anaphylaxis management for children — meets education and care sector requirements.' },
+    { code: 'HLTAID013', title: 'Provide First Aid in remote or isolated site', suits: 'remote communities, stations, rangers, mine sites', desc: 'First aid where help is a long way off — extended casualty care, communication and evacuation planning for remote and isolated locations.' }
+  ];
+
+  trips = [
+    { town: 'Katherine', region: 'Big Rivers, NT', reg: 'Katherine & Big Rivers', start: '2026-11-16', dates: '16–20 Nov', status: 'full' },
+    { town: 'Nhulunbuy', region: 'East Arnhem, NT', reg: 'Arnhem', start: '2026-11-30', dates: '30 Nov – 4 Dec', status: 'limited' },
+    { town: 'Jabiru', region: 'West Arnhem, NT', reg: 'Arnhem', start: '2027-02-08', dates: '8–10 Feb', status: 'open' },
+    { town: 'Tennant Creek', region: 'Barkly, NT', reg: 'Barkly & Central', start: '2027-02-15', dates: '15–18 Feb', status: 'open' },
+    { town: 'Alice Springs', region: 'Central Australia, NT', reg: 'Barkly & Central', start: '2027-02-22', dates: '22 Feb – 5 Mar', status: 'limited' },
+    { town: 'Kununurra', region: 'East Kimberley, WA', reg: 'WA top end', start: '2027-03-15', dates: '15–19 Mar', status: 'open' },
+    { town: 'Broome', region: 'West Kimberley, WA', reg: 'WA top end', start: '2027-03-22', dates: '22–26 Mar', status: 'open' },
+    { town: 'Karratha', region: 'Pilbara, WA', reg: 'WA top end', start: '2027-03-29', dates: '29 Mar – 2 Apr', status: 'open' },
+    { town: 'Katherine', region: 'Big Rivers, NT', reg: 'Katherine & Big Rivers', start: '2027-05-03', dates: '3–7 May', status: 'open' },
+    { town: 'Nhulunbuy', region: 'East Arnhem, NT', reg: 'Arnhem', start: '2027-05-17', dates: '17–21 May', status: 'open' },
+    { town: 'Alice Springs', region: 'Central Australia, NT', reg: 'Barkly & Central', start: '2027-06-07', dates: '7–18 Jun', status: 'open' }
+  ];
+
+  reviews = [
+    { q: 'This was the best and most comprehensive first aid training I have ever done.', n: 'Jeramie A.', d: 'July 2025' },
+    { q: 'Excellent & knowledgeable trainer. I find the real life examples added relevance & some valuable tips to take away — e.g. arnica & hypothermia treatments. Thank you :)', n: 'Breanna W.', d: 'Oct 2025' },
+    { q: 'Very informative course and instructor very clear and knowledgeable.', n: 'Duncan M.', d: 'Oct 2025' },
+    { q: 'The class was really interactive and practical.', n: 'Shaina K.', d: 'Nov 2025' },
+    { q: 'Excellent! Extremely knowledgeable & helpful.', n: 'Triston D.', d: 'Oct 2025' },
+    { q: 'Explained things really well, very strong with instructions.', n: 'Madien L.', d: 'Nov 2025' },
+    { q: 'Great session — thanks for sharing your experience with us.', n: 'Emma B.', d: 'Nov 2025' },
+    { q: 'Impressed, excellent teaching.', n: 'Krishna T.', d: 'Nov 2025' }
+  ];
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); }
+  componentDidUpdate(prev) { if (prev.startPage !== this.props.startPage && this.props.startPage) this.go(this.props.startPage); }
+
+  go(page, extra = {}) {
+    this.setState({ page, menuOpen: false, ...extra });
+    try { window.scrollTo({ top: 0 }); } catch (e) {}
+  }
+
+  tripLabel(t) { return t.town + ' · ' + t.dates + (t.start.startsWith('2027') ? ' 2027' : ' 2026'); }
+
+  tripVm(t) {
+    const st = { open: ['Taking bookings', '#E3F1E7', '#146B32'], limited: ['Limited dates left', '#FDEBDD', '#9C3A10'], full: ['Fully booked', '#ECEBE6', '#5A645D'] }[t.status];
+    const full = t.status === 'full';
+    return {
+      ...t, statusLabel: st[0], chipBg: st[1], chipFg: st[2],
+      cta: full ? 'Join waitlist' : 'Request these dates',
+      btnBg: full ? '#FFFFFF' : '#0E3B24', btnFg: full ? '#0E3B24' : '#FFFFFF',
+      onRequest: () => this.go('enquire', { trip: this.tripLabel(t), prefill: this.tripLabel(t) + (full ? ' (waitlist)' : ''), f: { ...this.state.f, town: t.town }, done: false })
+    };
+  }
+
+  renderVals() {
+    const s = this.state, p = s.page, isMobile = s.w < 1040;
+    const pages = [['home', 'Home'], ['schedule', 'Travel dates'], ['courses', 'Courses'], ['team', 'Our trainers'], ['booking', 'How booking works'], ['enquire', 'Enquire']];
+    const nav = pages.map(([id, label]) => ({ label, onClick: () => this.go(id), weight: p === id ? 800 : 600, bar: p === id ? '#178A3E' : 'transparent' }));
+    const vms = this.trips.map(t => this.tripVm(t));
+    const regions = ['All', 'Katherine & Big Rivers', 'Arnhem', 'Barkly & Central', 'WA top end'];
+    const shown = vms.filter(t => s.region === 'All' || t.reg === s.region);
+    const monthsMap = {};
+    shown.forEach(t => {
+      const d = new Date(t.start + 'T00:00:00');
+      const k = d.toLocaleString('en-AU', { month: 'long', year: 'numeric' });
+      (monthsMap[k] = monthsMap[k] || []).push(t);
+    });
+    const months = Object.keys(monthsMap).map(label => ({ label, trips: monthsMap[label] }));
+
+    const fieldDefs = [['org', 'Organisation *', 'text'], ['name', 'Contact name *', 'text'], ['email', 'Work email *', 'email'], ['phone', 'Phone *', 'tel'], ['town', 'Training location (town / site) *', 'text'], ['staff', 'Approx. number of staff *', 'number']];
+    const fields = fieldDefs.map(([k, label, type]) => ({
+      id: 'f-' + k, label, type, value: s.f[k], error: s.errors[k] || '', hasError: !!s.errors[k],
+      border: s.errors[k] ? '#B4321F' : '#E2DACB',
+      onChange: e => { const v = e.target.value; this.setState(st => ({ f: { ...st.f, [k]: v }, errors: { ...st.errors, [k]: undefined } })); }
+    }));
+
+    const enquireCandida = () => this.go('enquire', { prefill: 'Training delivered by Candida Jones', done: false });
+    return {
+      accent: this.props.accent ?? '#C24A15',
+      showNotes: this.props.showNotes ?? true,
+      balanceTerm: this.props.balanceTerm ?? '31 working days before the course',
+      isMobile, isDesktop: !isMobile, menuOpen: s.menuOpen, showMobileMenu: isMobile && s.menuOpen,
+      toggleMenu: () => this.setState({ menuOpen: !s.menuOpen }),
+      nav,
+      isHome: p === 'home', isSchedule: p === 'schedule', isCourses: p === 'courses', isTeam: p === 'team', isBooking: p === 'booking', isEnquire: p === 'enquire',
+      goHome: () => this.go('home'), goSchedule: () => this.go('schedule'), goCourses: () => this.go('courses'),
+      goBooking: () => this.go('booking'), goEnquire: () => this.go('enquire', { done: false }),
+      goOnline: () => { this.go('courses'); setTimeout(() => { const el = document.getElementById('online'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 100 }); }, 60); },
+      goEnquireCandida: enquireCandida,
+      showMobileBar: isMobile && p !== 'enquire',
+      footerPad: isMobile && p !== 'enquire' ? '92px' : '14px',
+      nextTrips: vms.filter(t => t.status !== 'full').slice(0, 3),
+      homeTrips: vms.slice(0, 6),
+      diffs: [
+        { title: 'We come to your workplace', body: 'No travelling to a training room. Our trainers arrive at your school, centre, clinic or site — from Darwin to remote communities.' },
+        { title: 'Tailored to how you work', body: 'Every course covers the required core units, built around your environment. Your staff bring their own experiences of first aid incidents into the class.' },
+        { title: 'One team, one standard', body: 'Everyone trains together, so you know your whole team is qualified — and every staff member can confidently ask a colleague for help when an incident happens.' }
+      ],
+      coreClients: [
+        { t: 'Schools', b: 'Teachers, support and admin staff' },
+        { t: 'Early learning & daycare', b: 'HLTAID012 for educators and carers' },
+        { t: 'Medical professionals', b: 'Clinics, practices and health teams' },
+        { t: 'Care organisations', b: 'Aged care, disability and community care' }
+      ],
+      alsoClients: ['Defence', 'Government departments', 'Local government Rangers', 'Fire & emergency services', 'Volunteer groups'],
+      courseRows: this.courses.map((c, i) => ({
+        ...c, open: s.openCourse === i, toggle: s.openCourse === i ? 'Close' : 'More details',
+        border: s.openCourse === i ? '#178A3E' : '#E2DACB',
+        onOpen: () => p === 'home' ? this.go('courses', { openCourse: i }) : this.setState({ openCourse: s.openCourse === i ? null : i }),
+        onEnquire: () => this.go('enquire', { chips: [c.code], prefill: c.code + ' — ' + c.title, done: false })
+      })),
+      online: [
+        { t: 'Adrenaline device update: introducing Neffy and Jext for anaphylaxis response', tag: '100% online' },
+        { t: 'Mental Health Awareness for First Responders', tag: '100% online' },
+        { t: 'Concussion Management in Australian Sports', tag: 'Non-accredited · online' }
+      ],
+      featured: this.reviews[0], reviews: this.reviews.slice(1),
+      steps: [
+        { n: '01', t: 'Send an enquiry', b: 'Tell us your organisation, location, the courses you need and roughly how many staff.' },
+        { n: '02', t: 'Confirm student numbers', b: 'Once your numbers are confirmed, we lock in a date — ideally while we\'re already travelling through your area.' },
+        { n: '03', t: '50% deposit secures it', b: 'The booking is made with a 50% deposit. The balance is due ' + (this.props.balanceTerm ?? '31 working days before the course') + '.' },
+        { n: '04', t: 'We train at your workplace', b: 'Our trainer arrives onsite and trains all your staff, all at once, all to the same professional standard.' }
+      ],
+      approach: [
+        { t: 'Dignity & respect', b: 'Every learner is treated with dignity, respect and cultural understanding.' },
+        { t: 'Your workplace, your scenarios', b: 'Core units delivered through situations your staff actually face.' },
+        { t: 'Learn from each other', b: 'Staff share their own first aid experiences, so the whole team learns together.' },
+        { t: 'Culturally appropriate', b: 'Relevant, respectful training for remote and regional communities.' }
+      ],
+      regionFilters: regions.map(r => {
+        const a = s.region === r;
+        return { label: r === 'All' ? 'All locations' : r, active: a, onClick: () => this.setState({ region: r }),
+          bg: a ? '#FFFFFF' : 'transparent', fg: a ? '#0E3B24' : '#FFFFFF', border: a ? '#FFFFFF' : 'rgba(255,255,255,0.45)' };
+      }),
+      months, noTrips: months.length === 0,
+      requestDarwin: () => this.go('enquire', { trip: 'Darwin & surrounds — any time', prefill: 'Darwin, Palmerston & rural area — year-round', done: false }),
+      fields,
+      orgTypes: ['School', 'Early learning / daycare', 'Medical practice / health service', 'Care organisation', 'Defence', 'Government department', 'Fire & emergency services', 'Volunteer group', 'Other organisation'],
+      orgType: s.orgType, setOrgType: e => this.setState({ orgType: e.target.value }),
+      tripOptions: ['Flexible — suggest a date', 'Darwin & surrounds — any time', ...this.trips.filter(t => t.status !== 'full').map(t => this.tripLabel(t)), ...(s.trip && !['Flexible — suggest a date', 'Darwin & surrounds — any time'].includes(s.trip) && this.trips.find(t => this.tripLabel(t) === s.trip && t.status === 'full') ? [s.trip] : [])],
+      tripSel: s.trip, setTrip: e => this.setState({ trip: e.target.value }),
+      courseChips: this.courses.map(c => {
+        const on = s.chips.includes(c.code);
+        return { code: c.code, on, bg: on ? '#178A3E' : '#FFFFFF', fg: on ? '#FFFFFF' : '#0E3B24', border: on ? '#178A3E' : '#C9C1B0',
+          onClick: () => this.setState(st => ({ chips: on ? st.chips.filter(x => x !== c.code) : [...st.chips, c.code] })) };
+      }),
+      msg: s.msg, setMsg: e => this.setState({ msg: e.target.value }),
+      orgConfirm: s.orgConfirm, toggleOrgConfirm: () => this.setState({ orgConfirm: !s.orgConfirm, errors: { ...s.errors, orgConfirm: undefined } }),
+      orgConfirmBorder: s.errors.orgConfirm ? '#B4321F' : '#E2DACB',
+      hasPrefill: !!s.prefill, prefillLabel: s.prefill,
+      hasErrors: Object.values(s.errors).some(Boolean),
+      sending: s.sending, submitLabel: s.sending ? 'Sending…' : 'Send enquiry →',
+      formDone: s.done, formOpen: !s.done,
+      firstName: s.f.name.trim().split(' ')[0],
+      submit: e => {
+        e.preventDefault();
+        const f = s.f, er = {};
+        ['org', 'name', 'town'].forEach(k => { if (!f[k].trim()) er[k] = 'Required.'; });
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.trim())) er.email = 'Enter a valid email.';
+        if (!/^[+()\d\s-]{8,}$/.test(f.phone.trim())) er.phone = 'Enter a valid phone number.';
+        if (!(parseInt(f.staff, 10) >= 1)) er.staff = 'Enter approx. staff numbers.';
+        if (!s.orgConfirm) er.orgConfirm = true;
+        if (Object.keys(er).length) { this.setState({ errors: er }); return; }
+        this.setState({ sending: true, errors: {} });
+        setTimeout(() => this.setState({ sending: false, done: true }), 900);
+      },
+      resetForm: () => this.setState({ done: false, prefill: '', chips: [], msg: '', orgConfirm: false, f: { org: '', name: '', email: '', phone: '', town: '', staff: '' } }),
+      contactRows: [
+        { label: 'Phone', value: '0419 526 319' },
+        { label: 'Email', value: 'admin@fatnt.com' },
+        { label: 'Where we are', value: '2/The Clock Tower, Dickward Drive\nCoconut Grove NT 0810' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
